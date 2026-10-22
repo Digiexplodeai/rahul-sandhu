@@ -739,15 +739,15 @@ Not all tumors can or should be treated with minimally invasive methods. Very la
   // 6. Admin User with secure PBKDF2 hash & salt
   const checkAdmin = db.prepare("SELECT * FROM admin_users WHERE username = 'admin'").get() as { id: string; password_hash: string; salt?: string } | undefined;
   if (!checkAdmin) {
-    const salt = "e87f12a9b3c4d5e6f7a8b9c0d1e2f3a4";
-    // PBKDF2 100k rounds SHA512 hash of initial seed setup password
-    const passwordHash = "8e15469ad5ea400f98394a5e01eb42b329ad46f047ff6f0b40ebc25dbcb7fdf68f0cb4901ba3e1451ae917e7137f8fbf53f06fa78dc9c279435848aa61730f0e";
+    const salt = "77225e5535c8af2e7d42e39828ac7b29";
+    // PBKDF2 100k rounds SHA512 hash of default admin password DrSandhu@2026!
+    const passwordHash = "e531d662b0a92338d8b7a9d9047933ac457fa776ec1aa79d449d3a9932793c9a9cf5408a0f8111d5d874a9131c540741c847bcc528440109474b516b82a286f6";
     const insertAdmin = db.prepare("INSERT INTO admin_users (id, username, password_hash, salt, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)");
     insertAdmin.run("admin-1", "admin", passwordHash, salt, "SuperAdmin", new Date().toISOString(), new Date().toISOString());
   } else if (!checkAdmin.salt) {
     // Upgrade existing admin user to have salt and secure hash
-    const salt = "e87f12a9b3c4d5e6f7a8b9c0d1e2f3a4";
-    const passwordHash = "8e15469ad5ea400f98394a5e01eb42b329ad46f047ff6f0b40ebc25dbcb7fdf68f0cb4901ba3e1451ae917e7137f8fbf53f06fa78dc9c279435848aa61730f0e";
+    const salt = "77225e5535c8af2e7d42e39828ac7b29";
+    const passwordHash = "e531d662b0a92338d8b7a9d9047933ac457fa776ec1aa79d449d3a9932793c9a9cf5408a0f8111d5d874a9131c540741c847bcc528440109474b516b82a286f6";
     db.prepare("UPDATE admin_users SET password_hash = ?, salt = ?, updated_at = ? WHERE id = ?").run(passwordHash, salt, new Date().toISOString(), checkAdmin.id);
   }
 

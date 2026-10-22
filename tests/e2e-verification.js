@@ -83,7 +83,7 @@ async function runTests() {
     // AUTHENTICATION: Admin Login Flow
     // -------------------------------------------------------------------------
     console.log("\n--- Admin Login Flow ---");
-    const testAdminPass = "VerificationPass2026!";
+    const testAdminPass = "DrSandhu@2026!";
     const db = new Database("data/site.db");
     const salt = crypto.randomBytes(16).toString("hex");
     const hash = crypto.pbkdf2Sync(testAdminPass, salt, 100000, 64, "sha512").toString("hex");
