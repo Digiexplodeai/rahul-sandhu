@@ -1,0 +1,374 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+@import "tailwindcss";
+
+.font-handwriting {
+  font-family: 'Caveat', cursive, sans-serif;
+}
+
+:root {
+  /* ═══════════════════════════════════════════════════════════════
+     QUIET LUXURY HEALTHCARE DESIGN SYSTEM
+     Lt Col (Dr) Rahul Sandhu — Surgical Oncology
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* Exact Core Colors */
+  --color-primary: #142B3D;        /* Primary Deep Navy */
+  --color-primary-soft: #1A3449;   /* Secondary Navy (elevation on dark) */
+  --color-primary-hover: #22435D;  /* Navy hover */
+  
+  --color-background: #FAFBF9;     /* Premium Off-White */
+  --color-surface: #FFFFFF;        /* Pure White */
+  --color-surface-alt: #EEF2F1;    /* Soft Grey-Green */
+
+  --color-teal: #17665F;           /* Medical Teal Accent */
+  --color-teal-hover: #124F4A;     /* Medical Teal Hover */
+  --color-teal-soft: rgba(23, 102, 95, 0.08); /* Subtle Teal Tint */
+
+  --color-champagne: #B59A6A;      /* Optional Muted Champagne (Limited Decorative) */
+  --color-champagne-soft: rgba(181, 154, 106, 0.12);
+
+  --color-heading: #142B3D;        /* Primary Deep Navy for Headings */
+  --color-body: #283941;           /* High-Legibility Body Text */
+  --color-muted: #5C707A;          /* Captions / Meta Text */
+
+  --color-border: #E2E7E4;         /* Soft Border on Light Surfaces */
+  --color-border-dark: rgba(255, 255, 255, 0.12); /* Subtle Border on Dark Navy */
+
+  --color-on-dark: #FAFBF9;        /* Off-White Headings on Navy */
+  --color-on-dark-body: #D6DFE4;   /* High-Contrast Readable Body on Navy */
+  --color-on-dark-muted: #96AAB5;  /* Secondary Text on Navy */
+
+  /* Aliases for Full Compatibility */
+  --color-accent: var(--color-teal);
+  --color-accent-hover: var(--color-teal-hover);
+  --color-accent-muted: var(--color-teal-soft);
+
+  --navy-900: var(--color-primary);
+  --navy-800: var(--color-primary-soft);
+  --navy-700: var(--color-primary-hover);
+  --gold-500: var(--color-teal);
+  --gold-600: var(--color-teal-hover);
+  --gold-700: var(--color-teal-hover);
+  --gold-muted: var(--color-teal-soft);
+  --surface: var(--color-background);
+  --surface-white: var(--color-surface);
+  --surface-alt: var(--color-surface-alt);
+  --border-light: var(--color-border);
+  --text-ink: var(--color-heading);
+  --text-body: var(--color-body);
+  --text-muted: var(--color-muted);
+  --text-ivory: var(--color-on-dark);
+  --text-slate: var(--color-on-dark-body);
+
+  --ivory: var(--text-ivory);
+  --slate: var(--text-slate);
+  --ink: var(--text-ink);
+  --hairline: rgba(20, 43, 61, 0.08);
+  --hairline-dark: rgba(255, 255, 255, 0.09);
+
+  /* Contrast System Tokens */
+  --text-on-dark: #FFFFFF;
+  --text-secondary-dark: #D5E4E9;
+  --text-muted-dark: #AEC8CF;
+  --text-accent-dark: #45DDC8;
+
+  --text-on-light: #102E3D;
+  --text-secondary-light: #405A63;
+  --text-accent-light: #176E72;
+
+  /* Typography */
+  --font-serif: 'Libre Baskerville', Georgia, serif;
+  --font-display: 'Libre Baskerville', Georgia, serif;
+  --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ─── Global Base Layer ───────────────────────────────────────────── */
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--text-on-light);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    line-height: 1.65;
+  }
+
+  /* Base typography: Scoped inside @layer base so any utility class (e.g. text-white, text-[#FAFBF9]) cleanly overrides */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    color: var(--text-on-light);
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+  }
+
+  /* Dark Sections Base Contrast */
+  .dark-section,
+  [data-theme="dark"],
+  .bg-\[\#142B3D\],
+  .bg-\[\#102E3D\],
+  .bg-navy-950,
+  .bg-navy-900,
+  footer {
+    color: var(--text-secondary-dark);
+  }
+
+  .dark-section h1,
+  .dark-section h2,
+  .dark-section h3,
+  .dark-section h4,
+  .dark-section h5,
+  .dark-section h6,
+  [data-theme="dark"] h1,
+  [data-theme="dark"] h2,
+  [data-theme="dark"] h3,
+  [data-theme="dark"] h4,
+  [data-theme="dark"] h5,
+  [data-theme="dark"] h6,
+  .bg-\[\#142B3D\] h1,
+  .bg-\[\#142B3D\] h2,
+  .bg-\[\#142B3D\] h3,
+  .bg-\[\#142B3D\] h4,
+  .bg-\[\#142B3D\] h5,
+  .bg-\[\#142B3D\] h6,
+  .bg-\[\#102E3D\] h1,
+  .bg-\[\#102E3D\] h2,
+  .bg-\[\#102E3D\] h3,
+  .bg-\[\#102E3D\] h4,
+  .bg-\[\#102E3D\] h5,
+  .bg-\[\#102E3D\] h6,
+  footer h1,
+  footer h2,
+  footer h3,
+  footer h4,
+  footer h5,
+  footer h6 {
+    color: var(--text-on-dark);
+  }
+
+  /* Light cards nested inside dark sections */
+  .light-card,
+  .light-section,
+  .dark-section .bg-white,
+  .dark-section .bg-\[\#FAFBF9\],
+  .bg-\[\#142B3D\] .bg-white,
+  .bg-\[\#142B3D\] .bg-\[\#FAFBF9\] {
+    color: var(--text-on-light);
+  }
+
+  .light-card h1, .light-card h2, .light-card h3, .light-card h4, .light-card h5, .light-card h6,
+  .light-section h1, .light-section h2, .light-section h3, .light-section h4, .light-section h5, .light-section h6,
+  .dark-section .bg-white h1, .dark-section .bg-white h2, .dark-section .bg-white h3, .dark-section .bg-white h4, .dark-section .bg-white h5, .dark-section .bg-white h6,
+  .bg-\[\#142B3D\] .bg-white h1, .bg-\[\#142B3D\] .bg-white h2, .bg-\[\#142B3D\] .bg-white h3, .bg-\[\#142B3D\] .bg-white h4, .bg-\[\#142B3D\] .bg-white h5, .bg-\[\#142B3D\] .bg-white h6 {
+    color: var(--text-on-light);
+  }
+}
+
+@layer utilities {
+  .font-serif   { font-family: var(--font-serif); }
+  .font-display { font-family: var(--font-display); }
+  .font-sans    { font-family: var(--font-sans); }
+
+  .text-on-dark { color: var(--text-on-dark); }
+  .text-secondary-dark { color: var(--text-secondary-dark); }
+  .text-muted-dark { color: var(--text-muted-dark); }
+  .text-accent-dark { color: var(--text-accent-dark); }
+
+  .text-on-light { color: var(--text-on-light); }
+  .text-secondary-light { color: var(--text-secondary-light); }
+  .text-accent-light { color: var(--text-accent-light); }
+
+  /* Typography Scale */
+  .text-h1 {
+    font-size: clamp(2.125rem, 4.5vw, 3.75rem); /* 34px - 60px */
+    line-height: 1.15;
+  }
+  .text-h2 {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);     /* 28px - 40px */
+    line-height: 1.22;
+  }
+  .text-h3 {
+    font-size: clamp(1.25rem, 2vw, 1.625rem);   /* 20px - 26px */
+    line-height: 1.3;
+  }
+}
+
+/* ─── Buttons ─────────────────────────────────────────────────────── */
+/* Primary Action Button — Medical Teal */
+.btn-teal,
+.btn-gold {
+  background-color: var(--color-teal);
+  color: #FFFFFF !important;
+  font-weight: 600;
+  border-radius: 9999px;
+  transition: all 0.25s ease-out;
+  box-shadow: 0 2px 10px rgba(23, 102, 95, 0.2);
+}
+.btn-teal:hover,
+.btn-gold:hover {
+  background-color: var(--color-teal-hover);
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 16px rgba(23, 102, 95, 0.3);
+  transform: translateY(-1px);
+}
+.btn-teal:active,
+.btn-gold:active {
+  transform: translateY(0);
+}
+
+/* Secondary Button — Elegant Navy Outline */
+.btn-outline-navy,
+.btn-outline-gold {
+  border: 1.5px solid var(--color-primary);
+  color: var(--color-primary) !important;
+  background: transparent;
+  border-radius: 9999px;
+  font-weight: 600;
+  transition: all 0.25s ease-out;
+}
+.btn-outline-navy:hover,
+.btn-outline-gold:hover {
+  background-color: var(--color-primary);
+  color: #FFFFFF !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(20, 43, 61, 0.15);
+}
+
+/* Secondary White Outline Button (for Dark Backgrounds) */
+.btn-outline-white {
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  color: #FFFFFF !important;
+  background: transparent;
+  border-radius: 9999px;
+  font-weight: 600;
+  transition: all 0.25s ease-out;
+}
+.btn-outline-white:hover {
+  border-color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+/* ─── Cards & Containers ──────────────────────────────────────────── */
+.card-luxury {
+  background: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  box-shadow: 0 2px 12px rgba(20, 43, 61, 0.04);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-luxury:hover {
+  border-color: rgba(23, 102, 95, 0.35);
+  box-shadow: 0 10px 28px rgba(20, 43, 61, 0.08);
+  transform: translateY(-2px);
+}
+
+.card-dark-luxury {
+  background: var(--color-primary-soft);
+  border: 1px solid var(--color-border-dark);
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-dark-luxury:hover {
+  border-color: rgba(23, 102, 95, 0.6);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  transform: translateY(-2px);
+}
+
+/* ─── Badges / Pills ──────────────────────────────────────────────── */
+.badge-teal {
+  background-color: var(--color-teal-soft);
+  border: 1px solid rgba(23, 102, 95, 0.2);
+  color: var(--color-teal);
+}
+.badge-gold {
+  background-color: var(--color-teal-soft);
+  border: 1px solid rgba(23, 102, 95, 0.2);
+  color: var(--color-teal);
+}
+
+/* ─── Form Inputs ─────────────────────────────────────────────────── */
+.form-input-luxury {
+  width: 100%;
+  height: 48px;
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: 0.625rem;
+  padding: 0 1rem;
+  font-size: 0.9375rem;
+  color: var(--color-heading);
+  transition: all 0.2s ease;
+}
+.form-input-luxury::placeholder {
+  color: #8C9DA6;
+}
+.form-input-luxury:focus {
+  outline: none;
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 3px rgba(23, 102, 95, 0.15);
+}
+textarea.form-input-luxury {
+  height: auto;
+  min-height: 110px;
+  padding: 0.75rem 1rem;
+}
+
+/* ─── Scrollbar ───────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #FAFBF9; }
+::-webkit-scrollbar-thumb {
+  background: #C2CEC9;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover { background: #17665F; }
+
+/* ─── Selection ───────────────────────────────────────────────────── */
+::selection {
+  background: rgba(23, 102, 95, 0.18);
+  color: var(--color-heading);
+}
+
+/* ─── Reduced Motion ──────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Brand Logo Link Focus & Interaction (No Click Outline) ────────── */
+.brand-logo-link {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  text-decoration: none;
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.brand-logo-link:hover,
+.brand-logo-link:active,
+.brand-logo-link:focus,
+.brand-logo-link:focus:not(:focus-visible) {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Keyboard users retain an accessible, refined focus cue */
+.brand-logo-link:focus-visible {
+  outline: 2px solid #45DDC8 !important;
+  outline-offset: 3px !important;
+  border-radius: 6px !important;
+  box-shadow: 0 0 0 1px rgba(20, 43, 61, 0.8) !important;
+}
+
