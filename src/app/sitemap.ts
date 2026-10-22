@@ -2,8 +2,8 @@ import { MetadataRoute } from "next";
 import { getSpecialties, getTreatments, getBlogs } from "@/lib/queries";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://drrahulsandhu.com";
-  const now = new Date("2026-10-10");
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://drrahulsandhu.com";
+  const now = new Date();
 
   const specialties = getSpecialties();
   const treatments = getTreatments();

@@ -71,20 +71,33 @@ Matched to the luxury medical personal branding aesthetic:
 
 ---
 
-## 🔐 Admin Panel (`/admin`)
+## 🔐 Admin Panel & Content Management System (`/admin`)
 
-- **URL:** `http://localhost:3002/admin`
-- **Default Username:** `admin`
-- **Default Password:** `admin123`
-- **Capabilities:**
-  1. **Patient Consultation Enquiries:** View real-time submissions, update status (`new`, `contacted`, `scheduled`, `closed`), and delete entries.
-  2. **Hero & General Text:** Edit headlines, subtitles, doctor photo paths, and hospital addresses.
-  3. **Section Visibility Manager:** Show or hide any homepage section with one click.
-  4. **Cancer Specialities:** Manage conditions, clinical staging, and descriptions.
-  5. **Surgical Treatments:** Manage procedures, indications, and surgical steps.
-  6. **Health Blogs:** Manage articles, publish status, categories, and read times.
-  7. **Testimonials:** Approve and feature patient reviews.
-  8. **SEO & Meta:** Configure page title templates, meta descriptions, and keywords.
+- **URL:** `/admin`
+- **Authentication:** Server-verified sessions with PBKDF2-SHA512 password hashing (100k iterations + secure per-user salt), HMAC-SHA256 session signature, rate limiting against brute-force attacks, and complete audit logging.
+- **Provisioning Administrators:**
+  Admin accounts are provisioned via the secure CLI utility:
+  ```bash
+  npm run create-admin <email> <password> [name]
+  ```
+- **Complete CMS Modules:**
+  1. **Executive Overview:** Real-time metrics on incoming enquiries, scheduled consultations, published content, and recent system actions.
+  2. **Patient Consultation Enquiries & Leads:** View incoming submissions, filter by status (`new`, `contacted`, `scheduled`, `closed`), write internal clinical follow-up notes, and export to CSV.
+  3. **Homepage Manager:** Section-by-section visual editor for hero headline, eyebrow, subtitle, hero doctor photo, about section, and dynamic show/hide section toggles.
+  4. **Pages & SEO Manager:** Manage metadata, banners, and status across all 11 core routes.
+  5. **Cancer Specialities CRUD:** Add, edit, reorder, and publish oncology conditions and surgical staging notes.
+  6. **Surgical Treatments CRUD:** Manage surgical procedures, clinical indications, and step-by-step descriptions.
+  7. **Health Blogs & Articles:** Full editorial management with categories, read times, slugs, and featured status.
+  8. **Media Library:** Centralized asset repository with drag-and-drop multi-file upload, MIME validation, URL copying, and active cross-site usage detection before deletion.
+  9. **Patient Reviews & Testimonials:** Manage verified patient testimonials with consent verification.
+  10. **Clinical Case Videos:** Embed YouTube clinical discussions and surgical presentations.
+  11. **FAQs Accordion Manager:** Add, edit, categorize, and reorder surgical oncology FAQs.
+  12. **Clinics, Hospitals & Maps:** Update hospital names, addresses, OPD visiting hours, direct contact numbers, and embed maps.
+  13. **Navigation & Footer:** Edit header links, mobile floating bar destinations, and copyright text.
+  14. **Global SEO Settings:** Configure meta title templates, descriptions, keywords, and OpenGraph defaults.
+  15. **User & Password Management:** Change master credentials with current password verification.
+  16. **Security & Activity Logs:** Real-time log of administrative logins, content edits, and system actions.
+  17. **Backup & Database Persistence:** On-demand database download (SQLite) or full CMS JSON snapshot, plus Supabase PostgreSQL export schema.
 
 ---
 

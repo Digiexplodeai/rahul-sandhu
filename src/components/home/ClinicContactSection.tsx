@@ -13,9 +13,25 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
-export default function ClinicContactSection() {
+interface ClinicContactSectionProps {
+  settings?: Record<string, string>;
+}
+
+export default function ClinicContactSection({ settings }: ClinicContactSectionProps) {
   const shouldReduceMotion = useReducedMotion();
   const luxuryEase = [0.22, 1, 0.36, 1] as const;
+
+  const clinic1Name = settings?.clinic1_name || "Shalby Multi-Specialty Hospital";
+  const clinic1Address = settings?.clinic1_address || "Sector 63, Phase 9, SAS Nagar, Mohali, Punjab 160062";
+  const clinic1Timings = settings?.clinic1_timings || "Mon – Sat: 9:00 AM – 5:00 PM";
+  const clinic1Map = settings?.clinic1_map_url || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3431.2586712398453!2d76.73238697626297!3d30.682914088686127!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fef9302e1c4ef%3A0xc3cf8e87d84f9ffb!2sShalby%20Multi-Specialty%20Hospital%20Mohali!5e0!3m2!1sen!2sin!4v1714000000000!5m2!1sen!2sin";
+
+  const clinic2Name = settings?.clinic2_name || "ClearMedi Healthcare, Kharar";
+  const clinic2Address = settings?.clinic2_address || "NH-21, Chandigarh-Ropar Road, Kharar, Punjab 140104";
+  const clinic2Timings = settings?.clinic2_timings || "Mon – Sat: By Prior Appointment";
+  const clinic2Map = settings?.clinic2_map_url || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3428.483120129038!2d76.64321287651307!3d30.74665488583489!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fe53b015b63eb%3A0xc47e30d1767675f9!2sClearMedi%20Radiant%20Hospital!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin";
+
+  const directPhone = settings?.topbar_phone || "+91 98889 70519";
 
   const [activeTab, setActiveTab] = useState<"shalby" | "clearmedi">("shalby");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -155,23 +171,23 @@ export default function ClinicContactSection() {
                 >
                   <div>
                     <h3 className="font-serif font-bold text-xl text-[#FFFFFF]">
-                      Shalby Multi-Specialty Hospital
+                      {clinic1Name}
                     </h3>
                     <p className="text-xs text-[#D5E4E9] mt-1.5 flex items-start gap-1.5">
                       <MapPin className="w-3.5 h-3.5 text-[#45DDC8] shrink-0 mt-0.5" />
-                      <span>Sector 63, Phase 9, SAS Nagar, Mohali, Punjab 160062</span>
+                      <span>{clinic1Address}</span>
                     </p>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-[#D5E4E9] pt-1">
                     <div className="flex items-center gap-2 bg-[#142B3D] p-3 rounded-lg border border-white/10">
                       <Clock className="w-3.5 h-3.5 text-[#45DDC8] shrink-0" />
-                      <span>Mon – Sat: 10 AM – 4 PM</span>
+                      <span>{clinic1Timings}</span>
                     </div>
                     <div className="flex items-center gap-2 bg-[#142B3D] p-3 rounded-lg border border-white/10">
                       <Phone className="w-3.5 h-3.5 text-[#45DDC8] shrink-0" />
-                      <a href="tel:+919888970519" className="hover:text-[#FFFFFF] text-[#D5E4E9] font-medium transition-colors">
-                        +91 98889 70519
+                      <a href={`tel:${directPhone.replace(/\s+/g, "")}`} className="hover:text-[#FFFFFF] text-[#D5E4E9] font-medium transition-colors">
+                        {directPhone}
                       </a>
                     </div>
                   </div>
@@ -179,14 +195,14 @@ export default function ClinicContactSection() {
                   {/* Google Map Embed */}
                   <div className="w-full h-40 rounded-xl overflow-hidden border border-white/15">
                     <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3431.2586712398453!2d76.73238697626297!3d30.682914088686127!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fef9302e1c4ef%3A0xc3cf8e87d84f9ffb!2sShalby%20Multi-Specialty%20Hospital%20Mohali!5e0!3m2!1sen!2sin!4v1714000000000!5m2!1sen!2sin"
+                      src={clinic1Map}
                       width="100%"
                       height="100%"
                       style={{ border: 0 }}
                       allowFullScreen={false}
                       loading="lazy"
                       referrerPolicy="no-referrer-when-downgrade"
-                      title="Shalby Hospital Mohali Location Map"
+                      title={`${clinic1Name} Location Map`}
                     />
                   </div>
 
@@ -213,23 +229,23 @@ export default function ClinicContactSection() {
                 >
                   <div>
                     <h3 className="font-serif font-bold text-xl text-[#FFFFFF]">
-                      ClearMedi Healthcare, Kharar
+                      {clinic2Name}
                     </h3>
                     <p className="text-xs text-[#D5E4E9] mt-1.5 flex items-start gap-1.5">
                       <MapPin className="w-3.5 h-3.5 text-[#45DDC8] shrink-0 mt-0.5" />
-                      <span>Near Sunny Enclave, Chandigarh-Kharar Highway, Kharar, Punjab 140301</span>
+                      <span>{clinic2Address}</span>
                     </p>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-[#D5E4E9] pt-1">
                     <div className="flex items-center gap-2 bg-[#142B3D] p-3 rounded-lg border border-white/10">
                       <Clock className="w-3.5 h-3.5 text-[#45DDC8] shrink-0" />
-                      <span>Mon – Sat: 4:30 – 7 PM</span>
+                      <span>{clinic2Timings}</span>
                     </div>
                     <div className="flex items-center gap-2 bg-[#142B3D] p-3 rounded-lg border border-white/10">
                       <Phone className="w-3.5 h-3.5 text-[#45DDC8] shrink-0" />
-                      <a href="tel:+919888970519" className="hover:text-[#FFFFFF] text-[#D5E4E9] font-medium transition-colors">
-                        +91 98889 70519
+                      <a href={`tel:${directPhone.replace(/\s+/g, "")}`} className="hover:text-[#FFFFFF] text-[#D5E4E9] font-medium transition-colors">
+                        {directPhone}
                       </a>
                     </div>
                   </div>
@@ -237,14 +253,14 @@ export default function ClinicContactSection() {
                   {/* Google Map Embed */}
                   <div className="w-full h-40 rounded-xl overflow-hidden border border-white/15">
                     <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3428.8953046755866!2d76.64335507626573!3d30.749419184544777!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ffaa3518c8bcf%3A0x6b7724eb2f8c0571!2sClearMedi%20Hospital%20Kharar!5e0!3m2!1sen!2sin!4v1714000000000!5m2!1sen!2sin"
+                      src={clinic2Map}
                       width="100%"
                       height="100%"
                       style={{ border: 0 }}
                       allowFullScreen={false}
                       loading="lazy"
                       referrerPolicy="no-referrer-when-downgrade"
-                      title="ClearMedi Healthcare Kharar Location Map"
+                      title={`${clinic2Name} Location Map`}
                     />
                   </div>
 

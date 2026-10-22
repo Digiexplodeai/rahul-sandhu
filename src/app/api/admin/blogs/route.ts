@@ -1,46 +1,30 @@
 import { NextResponse } from "next/server";
-import db from "@/lib/db";
-import { getBlogs } from "@/lib/queries";
-import { cookies } from "next/headers";
-
-async function isAuth() {
-  const cookieStore = await cookies();
-  const session = cookieStore.get("admin_session");
-  return Boolean(session?.value);
-}
+import { getBlogs, createBlog, updateBlog, deleteBlog, getBlogById } from "@/lib/queries";
+import { getAuthenticatedAdmin, logActivity } from "@/lib/auth";
 
 export async function GET() {
-  const auth = await isAuth();
-  if (!auth) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const admin = await getAuthenticatedAdmin();
+  if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const items = getBlogs(false);
   return NextResponse.json({ success: true, data: items });
 }
 
 export async function POST(request: Request) {
-  const auth = await isAuth();
-  if (!auth) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const admin = await getAuthenticatedAdmin();
+  if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const b = await request.json();
-    const id = b.id || "blog-" + Date.now();
-    const slug = b.slug || b.title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-    db.prepare(`
-      INSERT INTO blogs
-      (id, slug, title, excerpt, content, cover_image, category, author, read_time, published_date, is_published)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(
-      id,
+    if (!b.title) return NextResponse.json({ error: "Title is required" }, { status: 400 });
+
+    const slug = b.slug || b.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const id = createBlog({
+      ...b,
       slug,
-      b.title,
-      b.excerpt || "",
-      b.content || "",
-      b.cover_image || "/images/surgery-300x225.png",
-      b.category || "Cancer Awareness",
-      b.author || "Lt Col (Dr) Rahul Sandhu",
-      b.read_time || "5 min read",
-      b.published_date || new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-      b.is_published !== undefined ? b.is_published : 1
-    );
-    return NextResponse.json({ success: true, id });
+      is_published: b.is_published !== undefined ? Number(b.is_published) : 1,
+    });
+
+    logActivity("BLOG_CREATED", "blogs", id, `Published blog article: ${b.title}`, admin.username);
+    return NextResponse.json({ success: true, id, data: { id, slug }, message: "Blog created successfully" });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Error creating blog";
     return NextResponse.json({ error: message }, { status: 500 });
@@ -48,28 +32,19 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
-  const auth = await isAuth();
-  if (!auth) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const admin = await getAuthenticatedAdmin();
+  if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const b = await request.json();
-    db.prepare(`
-      UPDATE blogs SET
-      title = ?, excerpt = ?, content = ?, cover_image = ?, category = ?,
-      author = ?, read_time = ?, published_date = ?, is_published = ?
-      WHERE id = ?
-    `).run(
-      b.title,
-      b.excerpt || "",
-      b.content || "",
-      b.cover_image || "",
-      b.category || "",
-      b.author || "",
-      b.read_time || "",
-      b.published_date || "",
-      b.is_published !== undefined ? b.is_published : 1,
-      b.id
-    );
-    return NextResponse.json({ success: true });
+    if (!b.id) return NextResponse.json({ error: "Missing ID" }, { status: 400 });
+
+    updateBlog(b.id, {
+      ...b,
+      is_published: b.is_published !== undefined ? Number(b.is_published) : undefined,
+    });
+
+    logActivity("BLOG_UPDATED", "blogs", b.id, `Updated blog: ${b.title || b.id}`, admin.username);
+    return NextResponse.json({ success: true, message: "Blog updated successfully" });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Error updating blog";
     return NextResponse.json({ error: message }, { status: 500 });
@@ -77,14 +52,18 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const auth = await isAuth();
-  if (!auth) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const admin = await getAuthenticatedAdmin();
+  if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
     if (!id) return NextResponse.json({ error: "Missing ID" }, { status: 400 });
-    db.prepare("DELETE FROM blogs WHERE id = ?").run(id);
-    return NextResponse.json({ success: true });
+
+    const current = getBlogById(id);
+    deleteBlog(id);
+
+    logActivity("BLOG_DELETED", "blogs", id, `Deleted blog: ${current?.title || id}`, admin.username);
+    return NextResponse.json({ success: true, message: "Blog deleted successfully" });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Error deleting blog";
     return NextResponse.json({ error: message }, { status: 500 });

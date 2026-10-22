@@ -1,12 +1,15 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import TopBar from "@/components/layout/TopBar";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Star, Quote, CheckCircle, Play } from "lucide-react";
-import { getTestimonials } from "@/lib/queries";
+import { getTestimonials, getVideos, getSiteSettings } from "@/lib/queries";
 import { FadeUp, StaggerContainer, StaggerItem, SectionEntrance } from "@/components/ui/motion";
+
+
 
 export const metadata: Metadata = {
   title: "Patient Experiences & Reviews | Lt Col (Dr) Rahul Sandhu",
@@ -16,11 +19,17 @@ export const metadata: Metadata = {
 
 export default function TestimonialsPage() {
   const testimonials = getTestimonials();
+  const videos = getVideos();
+  const settings = getSiteSettings();
 
   return (
     <main className="min-h-screen flex flex-col bg-[#FAFBF9]">
-      <TopBar />
-      <Navbar />
+      <TopBar
+        location={settings.topbar_location}
+        phone={settings.topbar_phone}
+        hours={settings.topbar_hours}
+      />
+      <Navbar logoUrl={settings.site_logo} />
 
       {/* Hero Banner */}
       <section className="bg-[#142B3D] text-[#FAFBF9] py-12 lg:py-16 border-b border-white/10 overflow-hidden">
@@ -95,7 +104,7 @@ export default function TestimonialsPage() {
 
                   <div className="flex items-center gap-1 text-[10px] text-[#142B3D] bg-[#EEF2F1] border border-[#E2E7E4] px-2.5 py-1 rounded-full font-medium">
                     <CheckCircle className="w-3 h-3 text-[#17665F]" />
-                    <span>Google</span>
+                    <span>{item.source.includes("Google") ? "Google" : "Verified"}</span>
                   </div>
                 </div>
               </div>
@@ -104,58 +113,58 @@ export default function TestimonialsPage() {
         </StaggerContainer>
 
         {/* Video Experiences Section */}
-        <div id="videos" className="mt-16 pt-12 border-t border-[#E2E7E4]">
-          <FadeUp delay={0.1}>
-            <div className="max-w-2xl mb-8">
-              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#17665F] block mb-1">
-                Visual Case Insights
-              </span>
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#142B3D]">
-                Clinical Discussions &amp; Recovery Insights
-              </h2>
-            </div>
-          </FadeUp>
-
-          <StaggerContainer staggerChildren={0.12} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <StaggerItem>
-              <div className="rounded-xl overflow-hidden bg-white border border-[#E2E7E4] hover:border-[#17665F]/40 shadow-xs hover:shadow-md transition-all duration-300 p-6 space-y-3">
-                <div className="relative aspect-video rounded-lg bg-[#142B3D] flex items-center justify-center text-white overflow-hidden group">
-                  <div className="w-12 h-12 rounded-full bg-[#17665F] flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform duration-300">
-                    <Play className="w-5 h-5 ml-0.5 fill-current" />
-                  </div>
-                  <div className="absolute bottom-2.5 left-2.5 text-[11px] bg-black/60 px-2.5 py-0.5 rounded text-white">
-                    Surgical Oncology Recovery
-                  </div>
-                </div>
-                <h3 className="font-serif text-lg font-bold text-[#142B3D]">
-                  Understanding Post-Surgical Recovery &amp; Staging
-                </h3>
-                <p className="text-xs text-[#5C707A] leading-relaxed">
-                  Lt Col (Dr) Rahul Sandhu discusses what patients and families should expect during hospitalization and postoperative recovery.
-                </p>
+        {videos.length > 0 && (
+          <div id="videos" className="mt-16 pt-12 border-t border-[#E2E7E4]">
+            <FadeUp delay={0.1}>
+              <div className="max-w-2xl mb-8">
+                <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#17665F] block mb-1">
+                  Visual Case Insights
+                </span>
+                <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#142B3D]">
+                  Clinical Discussions &amp; Recovery Insights
+                </h2>
               </div>
-            </StaggerItem>
+            </FadeUp>
 
-            <StaggerItem>
-              <div className="rounded-xl overflow-hidden bg-white border border-[#E2E7E4] hover:border-[#17665F]/40 shadow-xs hover:shadow-md transition-all duration-300 p-6 space-y-3">
-                <div className="relative aspect-video rounded-lg bg-[#142B3D] flex items-center justify-center text-white overflow-hidden group">
-                  <div className="w-12 h-12 rounded-full bg-[#17665F] flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform duration-300">
-                    <Play className="w-5 h-5 ml-0.5 fill-current" />
+            <StaggerContainer staggerChildren={0.12} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {videos.map((vid) => (
+                <StaggerItem key={vid.id}>
+                  <div className="rounded-xl overflow-hidden bg-white border border-[#E2E7E4] hover:border-[#17665F]/40 shadow-xs hover:shadow-md transition-all duration-300 p-6 space-y-3">
+                    <a
+                      href={vid.youtube_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="relative aspect-video rounded-lg bg-[#142B3D] flex items-center justify-center text-white overflow-hidden group block"
+                    >
+                      {vid.thumbnail ? (
+                        <Image
+                          src={vid.thumbnail}
+                          alt={vid.title}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 550px"
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      ) : null}
+                      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors" />
+                      <div className="relative z-10 w-12 h-12 rounded-full bg-[#17665F] flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform duration-300">
+                        <Play className="w-5 h-5 ml-0.5 fill-current" />
+                      </div>
+                      <div className="absolute bottom-2.5 left-2.5 text-[11px] bg-black/60 px-2.5 py-0.5 rounded text-white z-10">
+                        Watch Discussion
+                      </div>
+                    </a>
+                    <h3 className="font-serif text-lg font-bold text-[#142B3D]">
+                      {vid.title}
+                    </h3>
+                    <p className="text-xs text-[#5C707A] leading-relaxed">
+                      {vid.description}
+                    </p>
                   </div>
-                  <div className="absolute bottom-2.5 left-2.5 text-[11px] bg-black/60 px-2.5 py-0.5 rounded text-white">
-                    Laparoscopic Cancer Surgery
-                  </div>
-                </div>
-                <h3 className="font-serif text-lg font-bold text-[#142B3D]">
-                  Minimally Invasive Techniques in Modern Cancer Care
-                </h3>
-                <p className="text-xs text-[#5C707A] leading-relaxed">
-                  Key advantages of high-definition keyhole techniques, minimal blood loss, and accelerated return to normal daily routines.
-                </p>
-              </div>
-            </StaggerItem>
-          </StaggerContainer>
-        </div>
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
+          </div>
+        )}
 
       </section>
 
@@ -180,7 +189,6 @@ export default function TestimonialsPage() {
           </div>
         </SectionEntrance>
       </section>
-
 
       <Footer />
     </main>

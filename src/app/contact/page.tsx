@@ -17,8 +17,7 @@ import {
   Send,
   Loader2,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FadeUp, SectionEntrance, LUXURY_EASE } from "@/components/ui/motion";
+import { FadeUp } from "@/components/ui/motion";
 
 export default function ContactPage() {
   const [activeTab, setActiveTab] = useState<"shalby" | "clearmedi">("shalby");

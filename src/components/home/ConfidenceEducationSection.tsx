@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Star, ArrowRight, BookOpen, MessageSquareQuote } from "lucide-react";
+import { Star, ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import type { Testimonial, Blog } from "@/lib/queries";
 

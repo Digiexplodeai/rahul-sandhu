@@ -10,6 +10,8 @@ import { Calendar, Clock, User, ArrowLeft, ArrowRight } from "lucide-react";
 import { getBlogs, getBlogBySlug } from "@/lib/queries";
 import { FadeUp, ImageReveal, SectionEntrance } from "@/components/ui/motion";
 
+
+
 interface PageProps {
   params: Promise<{ slug: string }>;
 }

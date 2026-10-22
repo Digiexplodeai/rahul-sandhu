@@ -5,9 +5,11 @@ import type { Metadata } from "next";
 import TopBar from "@/components/layout/TopBar";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { CheckCircle2, ShieldCheck, Award, Calendar } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { getSiteSettings } from "@/lib/queries";
 import { FadeUp, StaggerContainer, StaggerItem, ImageReveal, SectionEntrance, AnimatedCounter } from "@/components/ui/motion";
+
+
 
 export const metadata: Metadata = {
   title: "About Lt Col (Dr) Rahul Sandhu | Surgical Oncologist & Military Veteran",
@@ -16,6 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
+  const settings = getSiteSettings();
   const milestones = [
     {
       title: "M.B.B.S & Rotary Internship",
@@ -69,8 +72,12 @@ export default function AboutPage() {
 
   return (
     <main className="min-h-screen flex flex-col bg-[#FAFBF9]">
-      <TopBar />
-      <Navbar />
+      <TopBar
+        location={settings.topbar_location}
+        phone={settings.topbar_phone}
+        hours={settings.topbar_hours}
+      />
+      <Navbar logoUrl={settings.site_logo} />
 
       {/* Compact Elegant Page Hero */}
       <section className="bg-[#142B3D] text-[#FAFBF9] py-12 lg:py-16 border-b border-white/10 overflow-hidden">
@@ -83,12 +90,12 @@ export default function AboutPage() {
           </FadeUp>
           <FadeUp delay={0.15}>
             <h1 className="font-serif text-3xl sm:text-5xl font-bold tracking-tight text-[#FAFBF9]">
-              Lt Col (Dr) Rahul Sandhu
+              {settings.about_title || "Lt Col (Dr) Rahul Sandhu"}
             </h1>
           </FadeUp>
           <FadeUp delay={0.25}>
             <p className="text-sm sm:text-base text-[#D6DFE4]/85 max-w-2xl mt-3 font-sans leading-relaxed">
-              Combining 15+ years of surgical discipline forged in military trauma with specialized fellowship training in surgical oncology at Tata Memorial Centre (HBCHRC).
+              {settings.about_subtitle || "Combining 15+ years of surgical discipline forged in military trauma with specialized fellowship training in surgical oncology at Tata Memorial Centre (HBCHRC)."}
             </p>
           </FadeUp>
         </div>
@@ -104,7 +111,7 @@ export default function AboutPage() {
               <ImageReveal delay={0.1}>
                 <div className="relative rounded-2xl overflow-hidden shadow-md border border-[#E2E7E4] bg-[#EEF2F1] aspect-[3/4] group">
                   <Image
-                    src="/images/Dr-Rahul-Sandhu-original.jpeg"
+                    src={settings.about_doctor_photo || "/images/Dr-Rahul-Sandhu-original.jpeg"}
                     alt="Lt Col (Dr) Rahul Sandhu"
                     fill
                     priority
@@ -118,10 +125,10 @@ export default function AboutPage() {
               <FadeUp delay={0.2}>
                 <div className="bg-[#FAFBF9] p-6 rounded-xl border border-[#E2E7E4] space-y-2.5">
                   <p className="font-serif italic text-sm sm:text-base text-[#142B3D] leading-relaxed">
-                    &ldquo;Cancer surgery is not merely about excising tissue; it is about restoring hope, preserving organ function, and walking alongside the patient and their family through every step of healing.&rdquo;
+                    &ldquo;{settings.about_quote || "Cancer surgery is not merely about excising tissue; it is about restoring hope, preserving organ function, and walking alongside the patient and their family through every step of healing."}&rdquo;
                   </p>
                   <p className="text-xs font-semibold text-[#17665F] pt-2 border-t border-[#E2E7E4] uppercase tracking-wider">
-                    — Lt Col (Dr) Rahul Sandhu
+                    — {settings.about_title || "Lt Col (Dr) Rahul Sandhu"}
                   </p>
                 </div>
               </FadeUp>

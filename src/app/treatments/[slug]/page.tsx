@@ -6,9 +6,11 @@ import type { Metadata } from "next";
 import TopBar from "@/components/layout/TopBar";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { Scissors, FileCheck, Activity, Sparkles, ShieldCheck, ArrowRight, Calendar, Phone } from "lucide-react";
+import { Scissors, FileCheck, Activity, Sparkles, ShieldCheck, ArrowRight } from "lucide-react";
 import { getTreatments, getTreatmentBySlug } from "@/lib/queries";
 import { FadeUp, ImageReveal, SectionEntrance } from "@/components/ui/motion";
+
+
 
 interface PageProps {
   params: Promise<{ slug: string }>;

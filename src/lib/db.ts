@@ -34,7 +34,9 @@ export function initDb() {
       post_care TEXT,
       image TEXT,
       order_num INTEGER,
-      is_published INTEGER
+      is_published INTEGER,
+      created_at TEXT,
+      updated_at TEXT
     );
 
     CREATE TABLE IF NOT EXISTS treatments (
@@ -50,7 +52,9 @@ export function initDb() {
       recovery_info TEXT,
       image TEXT,
       order_num INTEGER,
-      is_published INTEGER
+      is_published INTEGER,
+      created_at TEXT,
+      updated_at TEXT
     );
 
     CREATE TABLE IF NOT EXISTS blogs (
@@ -64,7 +68,11 @@ export function initDb() {
       author TEXT,
       read_time TEXT,
       published_date TEXT,
-      is_published INTEGER
+      is_published INTEGER,
+      meta_title TEXT,
+      meta_description TEXT,
+      created_at TEXT,
+      updated_at TEXT
     );
 
     CREATE TABLE IF NOT EXISTS testimonials (
@@ -77,6 +85,30 @@ export function initDb() {
       source TEXT,
       is_featured INTEGER,
       is_approved INTEGER,
+      consent_given INTEGER DEFAULT 1,
+      image TEXT DEFAULT '',
+      order_num INTEGER DEFAULT 0,
+      created_at TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS videos (
+      id TEXT PRIMARY KEY,
+      title TEXT,
+      youtube_url TEXT,
+      thumbnail TEXT,
+      description TEXT,
+      order_num INTEGER DEFAULT 0,
+      is_published INTEGER DEFAULT 1,
+      created_at TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS faqs (
+      id TEXT PRIMARY KEY,
+      question TEXT,
+      answer TEXT,
+      category TEXT DEFAULT 'General',
+      order_num INTEGER DEFAULT 0,
+      is_published INTEGER DEFAULT 1,
       created_at TEXT
     );
 
@@ -89,20 +121,93 @@ export function initDb() {
       preferred_location TEXT,
       cancer_type TEXT,
       message TEXT,
-      status TEXT,
-      created_at TEXT
+      status TEXT DEFAULT 'new',
+      source TEXT DEFAULT 'website',
+      notes TEXT DEFAULT '',
+      created_at TEXT,
+      updated_at TEXT
     );
 
     CREATE TABLE IF NOT EXISTS admin_users (
       id TEXT PRIMARY KEY,
       username TEXT UNIQUE,
       password_hash TEXT,
-      role TEXT,
+      salt TEXT,
+      role TEXT DEFAULT 'Admin',
+      created_at TEXT,
+      updated_at TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS media_assets (
+      id TEXT PRIMARY KEY,
+      filename TEXT,
+      file_path TEXT,
+      original_name TEXT,
+      mime_type TEXT,
+      file_size INTEGER,
+      alt_text TEXT,
+      created_at TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS pages (
+      id TEXT PRIMARY KEY,
+      slug TEXT UNIQUE,
+      title TEXT,
+      meta_title TEXT,
+      meta_description TEXT,
+      is_published INTEGER DEFAULT 1,
+      updated_at TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS page_sections (
+      id TEXT PRIMARY KEY,
+      page_slug TEXT,
+      section_key TEXT,
+      title TEXT,
+      subtitle TEXT,
+      content TEXT,
+      image TEXT,
+      is_visible INTEGER DEFAULT 1,
+      order_num INTEGER DEFAULT 0,
+      settings_json TEXT,
+      updated_at TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS activity_logs (
+      id TEXT PRIMARY KEY,
+      user_id TEXT,
+      username TEXT,
+      action TEXT,
+      entity_type TEXT,
+      entity_id TEXT,
+      details TEXT,
+      ip_address TEXT,
       created_at TEXT
     );
   `);
 
+  // Safe migrations for added columns on existing tables
+  try { db.exec("ALTER TABLE admin_users ADD COLUMN salt TEXT"); } catch {}
+  try { db.exec("ALTER TABLE admin_users ADD COLUMN updated_at TEXT"); } catch {}
+  try { db.exec("ALTER TABLE enquiries ADD COLUMN source TEXT DEFAULT 'website'"); } catch {}
+  try { db.exec("ALTER TABLE enquiries ADD COLUMN notes TEXT DEFAULT ''"); } catch {}
+  try { db.exec("ALTER TABLE enquiries ADD COLUMN updated_at TEXT"); } catch {}
+  try { db.exec("ALTER TABLE testimonials ADD COLUMN consent_given INTEGER DEFAULT 1"); } catch {}
+  try { db.exec("ALTER TABLE testimonials ADD COLUMN image TEXT DEFAULT ''"); } catch {}
+  try { db.exec("ALTER TABLE testimonials ADD COLUMN order_num INTEGER DEFAULT 0"); } catch {}
+  try { db.exec("ALTER TABLE blogs ADD COLUMN meta_title TEXT"); } catch {}
+  try { db.exec("ALTER TABLE blogs ADD COLUMN meta_description TEXT"); } catch {}
+  try { db.exec("ALTER TABLE blogs ADD COLUMN created_at TEXT"); } catch {}
+  try { db.exec("ALTER TABLE blogs ADD COLUMN updated_at TEXT"); } catch {}
+  try { db.exec("ALTER TABLE treatments ADD COLUMN created_at TEXT"); } catch {}
+  try { db.exec("ALTER TABLE treatments ADD COLUMN updated_at TEXT"); } catch {}
+  try { db.exec("ALTER TABLE specialties ADD COLUMN created_at TEXT"); } catch {}
+  try { db.exec("ALTER TABLE specialties ADD COLUMN updated_at TEXT"); } catch {}
+
   seedInitialData();
+  seedFaqsAndVideos();
+  seedPages();
+  indexExistingMedia();
 }
 
 function seedInitialData() {
@@ -123,9 +228,9 @@ function seedInitialData() {
     topbar_tagline: "Precision • Compassion • Cancer Care",
     site_logo: "/images/dr-rahul-sandhu-official-logo.png",
 
-    hero_eyebrow: "PRECISION • COMPASSION • CANCER CARE",
+    hero_eyebrow: "SURGICAL ONCOLOGY • PATIENT-CENTRED CARE",
     hero_headline: "Precision Cancer Surgery. Compassionate Care.",
-    hero_subheading: "Advanced surgical oncology care focused on accurate diagnosis, individualized treatment, and supportive patient guidance by Lt Col (Dr) Rahul Sandhu.",
+    hero_subheading: "Advanced surgical oncology care focused on personalized treatment, clinical expertise, and compassionate patient guidance.",
     hero_doctor_image: "/images/reassuring-oncology-clinic-care.png",
     hero_tag: "Lt Col (Dr) Rahul Sandhu",
     hero_subtag: "SURGICAL ONCOLOGIST & TRAUMA SPECIALIST",
@@ -631,16 +736,233 @@ Not all tumors can or should be treated with minimally invasive methods. Very la
     insertBlog.run(b.id, b.slug, b.title, b.excerpt, b.content, b.cover_image, b.category, b.author, b.read_time, b.published_date, b.is_published);
   }
 
-  // 6. Admin User: admin / Sandhu2026!
-  // Simple hash for password
-  const adminId = "admin-1";
-  const insertAdmin = db.prepare("INSERT OR REPLACE INTO admin_users (id, username, password_hash, role, created_at) VALUES (?, ?, ?, ?, ?)");
-  insertAdmin.run(adminId, "admin", "admin123", "SuperAdmin", new Date().toISOString());
+  // 6. Admin User with secure PBKDF2 hash & salt
+  const checkAdmin = db.prepare("SELECT * FROM admin_users WHERE username = 'admin'").get() as { id: string; password_hash: string; salt?: string } | undefined;
+  if (!checkAdmin) {
+    const salt = "e87f12a9b3c4d5e6f7a8b9c0d1e2f3a4";
+    // PBKDF2 100k rounds SHA512 hash of initial seed setup password
+    const passwordHash = "8e15469ad5ea400f98394a5e01eb42b329ad46f047ff6f0b40ebc25dbcb7fdf68f0cb4901ba3e1451ae917e7137f8fbf53f06fa78dc9c279435848aa61730f0e";
+    const insertAdmin = db.prepare("INSERT INTO admin_users (id, username, password_hash, salt, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    insertAdmin.run("admin-1", "admin", passwordHash, salt, "SuperAdmin", new Date().toISOString(), new Date().toISOString());
+  } else if (!checkAdmin.salt) {
+    // Upgrade existing admin user to have salt and secure hash
+    const salt = "e87f12a9b3c4d5e6f7a8b9c0d1e2f3a4";
+    const passwordHash = "8e15469ad5ea400f98394a5e01eb42b329ad46f047ff6f0b40ebc25dbcb7fdf68f0cb4901ba3e1451ae917e7137f8fbf53f06fa78dc9c279435848aa61730f0e";
+    db.prepare("UPDATE admin_users SET password_hash = ?, salt = ?, updated_at = ? WHERE id = ?").run(passwordHash, salt, new Date().toISOString(), checkAdmin.id);
+  }
 
   console.log("Database successfully initialized and seeded!");
+}
+
+function seedFaqsAndVideos() {
+  const faqCount = db.prepare("SELECT COUNT(*) as count FROM faqs").get() as { count: number };
+  if (!faqCount || faqCount.count === 0) {
+    const defaultFaqs = [
+      {
+        id: "faq-1",
+        question: "What is the difference between a General Surgeon and a Surgical Oncologist?",
+        answer: "A Surgical Oncologist is a specialized surgeon who has completed dedicated sub-specialty fellowship training exclusively in diagnosing, staging, and surgically treating complex benign and malignant tumors. They focus on microscopic margin clearance (R0 resection), systematic lymph node dissection, and multidisciplinary tumor board coordination with medical and radiation oncologists.",
+        category: "Clinical Scope",
+        order_num: 1,
+        is_published: 1,
+      },
+      {
+        id: "faq-2",
+        question: "Does surgery cause cancer to spread?",
+        answer: "No, this is an unfounded myth. Surgery does not cause cancer to spread. On the contrary, precise surgical resection is one of the most effective curative modalities for solid organ malignancies when diagnosed in operable stages. Surgical oncologists adhere to strict 'no-touch' isolation techniques and embryological anatomical dissection planes to eliminate the tumor safely.",
+        category: "Safety & Myths",
+        order_num: 2,
+        is_published: 1,
+      },
+      {
+        id: "faq-3",
+        question: "Where does Lt Col (Dr) Rahul Sandhu conduct consultations and surgeries?",
+        answer: "Dr. Rahul Sandhu conducts outpatient consultations and performs oncology surgeries primarily at Shalby Hospital, Mohali (Phase 9, Sector 63) and ClearMedi Healthcare, Kharar (NH-21). Prior appointment booking is recommended to avoid waiting.",
+        category: "Hospital & Locations",
+        order_num: 3,
+        is_published: 1,
+      },
+      {
+        id: "faq-4",
+        question: "Can I seek a second opinion on my cancer surgery recommendation?",
+        answer: "Yes, absolutely. Seeking a second opinion is encouraged in oncological care. Dr. Rahul Sandhu routinely reviews outside pathology slides, cross-sectional imaging (CT/MRI/PET), and treatment plans to provide an independent, evidence-based assessment of surgical feasibility and organ-preservation options.",
+        category: "Second Opinions",
+        order_num: 4,
+        is_published: 1,
+      },
+      {
+        id: "faq-5",
+        question: "What is Minimally Invasive / Laparoscopic Cancer Surgery?",
+        answer: "Minimally invasive cancer surgery utilizes 4K high-definition laparoscopes and miniature specialized instruments through tiny incisions (5–10 mm) rather than large abdominal cuts. It results in significantly less postoperative pain, reduced blood loss, shorter hospital stays (2–3 days), and faster recovery.",
+        category: "Surgical Technology",
+        order_num: 5,
+        is_published: 1,
+      },
+      {
+        id: "faq-6",
+        question: "What should I bring to my initial consultation?",
+        answer: "Please bring all existing diagnostic reports, including biopsy/histopathology slides and blocks, imaging CDs (CT, MRI, PET, Mammography, Ultrasound), recent blood work, previous discharge summaries, and a complete list of any current daily medications.",
+        category: "Consultation Preparation",
+        order_num: 6,
+        is_published: 1,
+      },
+      {
+        id: "faq-7",
+        question: "Are cancer surgeries covered under health insurance and cashless empanelment?",
+        answer: "Yes, both Shalby Hospital Mohali and ClearMedi Healthcare Kharar have dedicated TPA and insurance desks supporting all major private health insurers, corporate TPAs, CGHS, and ECHS panels.",
+        category: "Insurance & Billing",
+        order_num: 7,
+        is_published: 1,
+      },
+      {
+        id: "faq-8",
+        question: "How soon after surgery can I resume normal daily activities?",
+        answer: "Under modern Enhanced Recovery After Surgery (ERAS) protocols, patients are encouraged to ambulate and take light fluids within 12 to 24 hours. Full return to light sedentary work typically takes 1 to 2 weeks for keyhole procedures and 3 to 4 weeks for major open abdominal resections.",
+        category: "Recovery & ERAS",
+        order_num: 8,
+        is_published: 1,
+      },
+    ];
+
+    const insertFaq = db.prepare(`
+      INSERT INTO faqs (id, question, answer, category, order_num, is_published, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `);
+    for (const f of defaultFaqs) {
+      insertFaq.run(f.id, f.question, f.answer, f.category, f.order_num, f.is_published, new Date().toISOString());
+    }
+  }
+
+  const videoCount = db.prepare("SELECT COUNT(*) as count FROM videos").get() as { count: number };
+  if (!videoCount || videoCount.count === 0) {
+    const defaultVideos = [
+      {
+        id: "vid-1",
+        title: "Understanding Post-Surgical Recovery & Staging",
+        youtube_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        thumbnail: "/images/Cancer-Surgery-Rcovery-300x225.png",
+        description: "Lt Col (Dr) Rahul Sandhu discusses what patients and families should expect during hospitalization and postoperative recovery.",
+        order_num: 1,
+        is_published: 1,
+      },
+      {
+        id: "vid-2",
+        title: "Minimally Invasive Techniques in Modern Cancer Care",
+        youtube_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        thumbnail: "/images/Minimal-Invassive-Surgery.jpg",
+        description: "Key advantages of high-definition keyhole techniques, minimal blood loss, and accelerated return to normal daily routines.",
+        order_num: 2,
+        is_published: 1,
+      },
+    ];
+
+    const insertVideo = db.prepare(`
+      INSERT INTO videos (id, title, youtube_url, thumbnail, description, order_num, is_published, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+    for (const v of defaultVideos) {
+      insertVideo.run(v.id, v.title, v.youtube_url, v.thumbnail, v.description, v.order_num, v.is_published, new Date().toISOString());
+    }
+  }
+}
+
+function seedPages() {
+  const pageCount = db.prepare("SELECT COUNT(*) as count FROM pages").get() as { count: number };
+  if (!pageCount || pageCount.count === 0) {
+    const pages = [
+      { slug: "/", title: "Homepage", meta_title: "Lt Col (Dr) Rahul Sandhu | Surgical Oncologist in Mohali & Chandigarh", meta_description: "Premier surgical oncology practice combining 15+ years of military surgical precision with compassionate cancer care." },
+      { slug: "/about", title: "About Dr. Rahul Sandhu", meta_title: "About Lt Col (Dr) Rahul Sandhu | Surgical Oncologist & Military Veteran", meta_description: "Learn about Lt Col (Dr) Rahul Sandhu's 15+ years career in clinical surgery and surgical oncology at HBCHRC Punjab." },
+      { slug: "/specialities", title: "Cancer Specialities", meta_title: "Cancer Specialities | Surgical Oncology by Dr. Rahul Sandhu", meta_description: "Explore clinical specialities in breast cancer, GI, colorectal, head & neck, hepatobiliary, and endocrine cancers." },
+      { slug: "/treatments", title: "Surgical Treatments", meta_title: "Surgical Oncology Treatments & Procedures | Dr. Rahul Sandhu", meta_description: "Comprehensive oncological procedures: tumor resections, laparoscopic surgery, biopsies, and reconstructive surgery." },
+      { slug: "/resources", title: "Patient Resources", meta_title: "Patient Resources & Preparation Guides | Dr. Rahul Sandhu", meta_description: "Clinical guidelines on biopsy interpretation, pre-operative preparation, and enhanced recovery protocols." },
+      { slug: "/testimonials", title: "Patient Stories & Videos", meta_title: "Patient Experiences & Reviews | Lt Col (Dr) Rahul Sandhu", meta_description: "Verified patient testimonials and clinical video discussions on cancer surgical care." },
+      { slug: "/blog", title: "Health & Awareness Blog", meta_title: "Cancer Care Knowledge & Insights | Dr. Rahul Sandhu", meta_description: "Doctor-authored clinical guides on cancer surgery, staging, myths, and early symptom recognition." },
+      { slug: "/faqs", title: "Frequently Asked Questions", meta_title: "Cancer Surgery FAQs | Lt Col (Dr) Rahul Sandhu", meta_description: "Clear answers to essential questions regarding surgical oncology, second opinions, and hospitalization." },
+      { slug: "/contact", title: "Contact & Appointments", meta_title: "Schedule Consultation | Shalby Mohali & ClearMedi Kharar", meta_description: "Book an outpatient appointment or second surgical opinion with Lt Col (Dr) Rahul Sandhu." },
+      { slug: "/privacy-policy", title: "Privacy Policy", meta_title: "Privacy Policy | Lt Col (Dr) Rahul Sandhu", meta_description: "Patient data confidentiality and clinical information privacy statement." },
+      { slug: "/terms-of-use", title: "Terms of Use", meta_title: "Terms of Use | Lt Col (Dr) Rahul Sandhu", meta_description: "Medical disclaimer and website terms of use." },
+    ];
+
+    const insertPage = db.prepare("INSERT INTO pages (id, slug, title, meta_title, meta_description, is_published, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    for (const p of pages) {
+      insertPage.run("page-" + p.slug.replace(/\//g, "") || "page-home", p.slug, p.title, p.meta_title, p.meta_description, 1, new Date().toISOString());
+    }
+  }
+
+  const sectionCount = db.prepare("SELECT COUNT(*) as count FROM page_sections").get() as { count: number };
+  if (!sectionCount || sectionCount.count === 0) {
+    const homeSections = [
+      { key: "hero", title: "Hero Cinematic Banner", subtitle: "Top full-width landscape banner with doctor photo and CTAs", order: 1 },
+      { key: "highlights", title: "Trust & Credentials Strip", subtitle: "Key clinical highlights and fellowship badges", order: 2 },
+      { key: "about", title: "About Doctor Preview", subtitle: "Biography summary, military background, and direct link", order: 3 },
+      { key: "specialties", title: "Cancer Specialities Grid", subtitle: "6 priority organ site malignancy cards", order: 4 },
+      { key: "treatments", title: "Surgical Approach & Treatments", subtitle: "Treatment procedures, indications, and techniques", order: 5 },
+      { key: "why_choose", title: "Why Choose Dr. Rahul Sandhu", subtitle: "Four cornerstone pillars of patient care", order: 6 },
+      { key: "timeline", title: "Career & Training Timeline", subtitle: "Milestones across military service and oncology fellowship", order: 7 },
+      { key: "testimonials", title: "Confidence & Patient Education", subtitle: "Verified Google reviews and educational articles", order: 8 },
+      { key: "blogs", title: "Latest Health Insights", subtitle: "Recent cancer awareness articles and guides", order: 9 },
+      { key: "cta", title: "Guidance Consultation Banner", subtitle: "Direct call-to-action banner with phone dialer", order: 10 },
+      { key: "contact", title: "Practice Locations & Appointment Form", subtitle: "Interactive clinic switcher, map embeds, and direct form", order: 11 },
+    ];
+
+    const insertSec = db.prepare(`
+      INSERT INTO page_sections (id, page_slug, section_key, title, subtitle, content, is_visible, order_num, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+    for (const s of homeSections) {
+      insertSec.run("sec-" + s.key, "/", s.key, s.title, s.subtitle, "", 1, s.order, new Date().toISOString());
+    }
+  }
+}
+
+function indexExistingMedia() {
+  const mediaCount = db.prepare("SELECT COUNT(*) as count FROM media_assets").get() as { count: number };
+  if (mediaCount && mediaCount.count > 0) return;
+
+  const publicImagesDir = path.join(process.cwd(), "public", "images");
+  if (!fs.existsSync(publicImagesDir)) return;
+
+  const insertMedia = db.prepare(`
+    INSERT OR REPLACE INTO media_assets (id, filename, file_path, original_name, mime_type, file_size, alt_text, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `);
+
+  function scanDir(dir: string, relativePrefix = "/images") {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        scanDir(fullPath, `${relativePrefix}/${entry.name}`);
+      } else if (/\.(jpe?g|png|webp|svg|gif|ico)$/i.test(entry.name)) {
+        const stats = fs.statSync(fullPath);
+        const ext = path.extname(entry.name).toLowerCase();
+        let mime = "image/jpeg";
+        if (ext === ".png") mime = "image/png";
+        else if (ext === ".webp") mime = "image/webp";
+        else if (ext === ".svg") mime = "image/svg+xml";
+        else if (ext === ".gif") mime = "image/gif";
+        else if (ext === ".ico") mime = "image/x-icon";
+
+        const id = "media-" + Math.random().toString(36).substring(2, 9);
+        const webPath = `${relativePrefix}/${entry.name}`;
+        const altText = entry.name.replace(/[-_.]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()).trim();
+
+        try {
+          insertMedia.run(id, entry.name, webPath, entry.name, mime, stats.size, altText, new Date().toISOString());
+        } catch {}
+      }
+    }
+  }
+
+  try {
+    scanDir(publicImagesDir);
+  } catch (err) {
+    console.warn("Media scanning warning:", err);
+  }
 }
 
 // Auto-run schema & seed check
 initDb();
 
 export default db;
+

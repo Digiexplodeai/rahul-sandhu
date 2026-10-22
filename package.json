@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "create-admin": "node scripts/create-admin.js",
+    "export-supabase": "node scripts/migrate-to-supabase.js"
   },
   "dependencies": {
     "@types/better-sqlite3": "^9.6.0",

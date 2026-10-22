@@ -18,6 +18,8 @@ import {
   getTestimonials,
 } from "@/lib/queries";
 
+
+
 export default async function HomePage() {
   const settings = getSiteSettings();
   const specialties = getSpecialties();
@@ -25,57 +27,109 @@ export default async function HomePage() {
   const blogs = getBlogs();
   const testimonials = getTestimonials();
 
+  // Dynamic Section Visibility
+  let visibility: Record<string, boolean> = {
+    topbar: true,
+    hero: true,
+    highlights: true,
+    about: true,
+    specialties: true,
+    treatments: true,
+    testimonials: true,
+    blogs: true,
+    contact: true,
+    footer: true,
+  };
+  try {
+    if (settings.section_visibility) {
+      visibility = { ...visibility, ...JSON.parse(settings.section_visibility) };
+    }
+  } catch {}
+
+  // Parse hero headline lines dynamically
+  let h1 = "Precision Cancer Surgery.";
+  let h2 = "Compassionate Care.";
+  if (settings.hero_headline) {
+    if (settings.hero_headline.includes(".")) {
+      const parts = settings.hero_headline.split(".");
+      h1 = parts[0].trim() + ".";
+      h2 = parts.slice(1).join(".").trim() || h2;
+    } else {
+      h1 = settings.hero_headline;
+      h2 = settings.hero_subtag || "";
+    }
+  }
+
   return (
     <main className="min-h-screen flex flex-col bg-[#FAFBF9]">
       <DoctorSchema />
 
-      {/* Simplified Top Contact Strip */}
-      <TopBar
-        location={settings.topbar_location}
-        phone={settings.topbar_phone}
-        hours={settings.topbar_hours}
-      />
+      {/* Top Contact Strip */}
+      {visibility.topbar !== false && (
+        <TopBar
+          location={settings.topbar_location}
+          phone={settings.topbar_phone}
+          hours={settings.topbar_hours}
+        />
+      )}
 
-      {/* Redesigned Quiet Luxury Navigation with Official Logo */}
+      {/* Quiet Luxury Navigation with Official Logo */}
       <Navbar logoUrl={settings.site_logo} />
 
       {/* SECTION 1 — Full-Width Cinematic Landscape Hero Banner */}
-      <HeroSection
-        eyebrow="SURGICAL ONCOLOGY • PATIENT-CENTRED CARE"
-        headlineLine1="Precision Cancer Surgery."
-        headlineLine2="Compassionate Care."
-        subheading="Advanced surgical oncology care focused on personalized treatment, clinical expertise, and compassionate patient guidance."
-        heroImage={settings.hero_doctor_image || "/images/reassuring-oncology-clinic-care.png"}
-      />
+      {visibility.hero !== false && (
+        <HeroSection
+          eyebrow={settings.hero_eyebrow || "SURGICAL ONCOLOGY • PATIENT-CENTRED CARE"}
+          headlineLine1={h1}
+          headlineLine2={h2}
+          subheading={settings.hero_subheading || "Advanced surgical oncology care focused on personalized treatment, clinical expertise, and compassionate patient guidance."}
+          heroImage={settings.hero_doctor_image || "/images/reassuring-oncology-clinic-care.png"}
+          ctaPrimaryLabel={settings.hero_cta_primary_label || "BOOK A CONSULTATION"}
+          ctaPrimaryLink={settings.hero_cta_primary_link || ""}
+          ctaSecondaryLabel={settings.hero_cta_secondary_label || "MEET DR. RAHUL SANDHU"}
+          ctaSecondaryLink={settings.hero_cta_secondary_link || "/about"}
+        />
+      )}
 
       {/* SECTION 2 — Slim Trust & Credentials Bar */}
-      <CredentialsStrip />
+      {visibility.highlights !== false && <CredentialsStrip />}
 
       {/* SECTION 3 — Meet Dr. Rahul Sandhu (Concise Bio & Direct About Link) */}
-      <AboutSection
-        doctorPhoto={settings.about_doctor_photo}
-        eyebrow={settings.about_eyebrow}
-        title={settings.about_title}
-        designation={settings.about_subtitle}
-      />
+      {visibility.about !== false && (
+        <AboutSection
+          doctorPhoto={settings.about_doctor_photo}
+          eyebrow={settings.about_eyebrow || "MEET YOUR SURGICAL ONCOLOGIST"}
+          title={settings.about_title || "Lt Col (Dr) Rahul Sandhu"}
+          designation={settings.about_subtitle || "Senior Consultant — Surgical Oncology | Former Indian Armed Forces Specialist"}
+          bio={settings.about_bio_p1}
+        />
+      )}
 
       {/* SECTION 4 — Cancer Specialities (6 Priority Specialities in Consistent Grid) */}
-      <SpecialtiesSection specialties={specialties} />
+      {visibility.specialties !== false && (
+        <SpecialtiesSection specialties={specialties} />
+      )}
 
       {/* SECTION 5 — Surgical Expertise & Treatment Approach (Single High-Impact Navy Section) */}
-      <ExpertiseApproachSection treatments={treatments} />
+      {visibility.treatments !== false && (
+        <ExpertiseApproachSection treatments={treatments} />
+      )}
 
-      {/* SECTION 6 — Patient Confidence & Education (1 Verified Testimonial + 2 Articles) */}
-      <ConfidenceEducationSection
-        testimonials={testimonials}
-        blogs={blogs}
-      />
+      {/* SECTION 6 — Patient Confidence & Education (Verified Testimonial + Educational Articles) */}
+      {visibility.testimonials !== false && (
+        <ConfidenceEducationSection
+          testimonials={testimonials}
+          blogs={blogs}
+        />
+      )}
 
       {/* SECTION 7 — Consultation & Practice Locations (Shalby & ClearMedi + Appointment Form) */}
-      <ClinicContactSection />
+      {visibility.contact !== false && (
+        <ClinicContactSection settings={settings} />
+      )}
 
       {/* Compact Premium Footer */}
-      <Footer />
+      {visibility.footer !== false && <Footer />}
     </main>
   );
 }

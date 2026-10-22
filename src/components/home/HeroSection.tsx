@@ -11,16 +11,30 @@ interface HeroSectionProps {
   headlineLine2?: string;
   subheading?: string;
   heroImage?: string;
+  ctaPrimaryLabel?: string;
+  ctaPrimaryLink?: string;
+  ctaSecondaryLabel?: string;
+  ctaSecondaryLink?: string;
 }
+
+const DEFAULT_HERO_IMAGE = "/images/reassuring-oncology-clinic-care.png";
+const DEFAULT_HERO_WEBP = "/images/reassuring-oncology-clinic-care.webp";
 
 export default function HeroSection({
   eyebrow = "SURGICAL ONCOLOGY • PATIENT-CENTRED CARE",
   headlineLine1 = "Precision Cancer Surgery.",
   headlineLine2 = "Compassionate Care.",
   subheading = "Advanced surgical oncology care focused on personalized treatment, clinical expertise, and compassionate patient guidance.",
-  heroImage = "/images/reassuring-oncology-clinic-care.png",
+  heroImage = DEFAULT_HERO_IMAGE,
+  ctaPrimaryLabel = "BOOK A CONSULTATION",
+  ctaPrimaryLink = "",
+  ctaSecondaryLabel = "MEET DR. RAHUL SANDHU",
+  ctaSecondaryLink = "/about",
 }: HeroSectionProps) {
   const shouldReduceMotion = useReducedMotion();
+
+  const [failedImg, setFailedImg] = React.useState<string | null>(null);
+  const imgSrc = failedImg === heroImage ? DEFAULT_HERO_IMAGE : (heroImage || DEFAULT_HERO_IMAGE);
 
   const openAppointmentModal = () => {
     if (typeof window !== "undefined") {
@@ -33,13 +47,18 @@ export default function HeroSection({
 
   // Determine if using custom admin image or default reassuring care asset
   const isDefaultAsset =
-    !heroImage ||
-    heroImage.includes("reassuring-oncology-clinic-care") ||
-    heroImage.includes("dr-rahul-sandhu-new-hero") ||
-    heroImage.includes("dr-rahul-sandhu-hero");
+    !imgSrc ||
+    imgSrc.includes("reassuring-oncology-clinic-care") ||
+    imgSrc.includes("dr-rahul-sandhu-new-hero") ||
+    imgSrc.includes("dr-rahul-sandhu-hero");
 
-  const desktopImgSrc = heroImage || "/images/reassuring-oncology-clinic-care.png";
-  const webpSrc = isDefaultAsset ? "/images/reassuring-oncology-clinic-care.webp" : null;
+  const webpSrc = isDefaultAsset ? DEFAULT_HERO_WEBP : null;
+
+  const handleImageError = () => {
+    if (heroImage && failedImg !== heroImage) {
+      setFailedImg(heroImage);
+    }
+  };
 
   return (
     <section
@@ -72,7 +91,8 @@ export default function HeroSection({
           <picture className="h-full w-auto max-w-none block">
             {webpSrc && <source srcSet={webpSrc} type="image/webp" />}
             <img
-              src={desktopImgSrc}
+              src={imgSrc}
+              onError={handleImageError}
               alt="Lt Col (Dr) Rahul Sandhu - Surgical Oncology clinical care consultation with patient"
               className="h-full w-auto max-w-none object-contain object-right block"
               loading="eager"
@@ -163,23 +183,35 @@ export default function HeroSection({
               className="flex flex-wrap items-center gap-4 pt-2"
             >
               {/* Primary Consultation Button */}
-              <button
-                type="button"
-                onClick={openAppointmentModal}
-                id="hero-book-consultation-btn"
-                className="group relative bg-[#17665F] hover:bg-[#124F4A] text-white px-7 py-3.5 rounded-full text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all duration-300 shadow-[0_4px_20px_rgba(23,102,95,0.4)] hover:shadow-[0_8px_28px_rgba(23,102,95,0.55)] flex items-center gap-2.5 cursor-pointer overflow-hidden border border-[#45DDC8]/30 hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#45DDC8]"
-              >
-                <span className="absolute inset-0 w-full h-full bg-white/15 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
-                <Calendar className="relative z-10 w-4 h-4 text-[#EEF2F1] group-hover:scale-110 transition-transform duration-200" />
-                <span className="relative z-10">Book a Consultation</span>
-              </button>
+              {ctaPrimaryLink && ctaPrimaryLink !== "#book-consultation" ? (
+                <Link
+                  href={ctaPrimaryLink}
+                  id="hero-book-consultation-btn"
+                  className="group relative bg-[#17665F] hover:bg-[#124F4A] text-white px-7 py-3.5 rounded-full text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all duration-300 shadow-[0_4px_20px_rgba(23,102,95,0.4)] hover:shadow-[0_8px_28px_rgba(23,102,95,0.55)] flex items-center gap-2.5 cursor-pointer overflow-hidden border border-[#45DDC8]/30 hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#45DDC8]"
+                >
+                  <span className="absolute inset-0 w-full h-full bg-white/15 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+                  <Calendar className="relative z-10 w-4 h-4 text-[#EEF2F1] group-hover:scale-110 transition-transform duration-200" />
+                  <span className="relative z-10">{ctaPrimaryLabel || "BOOK A CONSULTATION"}</span>
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={openAppointmentModal}
+                  id="hero-book-consultation-btn"
+                  className="group relative bg-[#17665F] hover:bg-[#124F4A] text-white px-7 py-3.5 rounded-full text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all duration-300 shadow-[0_4px_20px_rgba(23,102,95,0.4)] hover:shadow-[0_8px_28px_rgba(23,102,95,0.55)] flex items-center gap-2.5 cursor-pointer overflow-hidden border border-[#45DDC8]/30 hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#45DDC8]"
+                >
+                  <span className="absolute inset-0 w-full h-full bg-white/15 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+                  <Calendar className="relative z-10 w-4 h-4 text-[#EEF2F1] group-hover:scale-110 transition-transform duration-200" />
+                  <span className="relative z-10">{ctaPrimaryLabel || "BOOK A CONSULTATION"}</span>
+                </button>
+              )}
 
               {/* Secondary Doctor Profile Button */}
               <Link
-                href="/about"
+                href={ctaSecondaryLink || "/about"}
                 className="group inline-flex items-center gap-2 border border-white/35 hover:border-white bg-[#102A3B]/60 hover:bg-[#102A3B]/90 backdrop-blur-md text-[#FAFBF9] px-6 py-3.5 rounded-full text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all duration-200 shadow-xs hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
-                <span>Meet Dr. Rahul Sandhu</span>
+                <span>{ctaSecondaryLabel || "MEET DR. RAHUL SANDHU"}</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
               </Link>
             </motion.div>
@@ -229,7 +261,8 @@ export default function HeroSection({
           <picture className="w-full h-full block">
             {webpSrc && <source srcSet={webpSrc} type="image/webp" />}
             <img
-              src={desktopImgSrc}
+              src={imgSrc}
+              onError={handleImageError}
               alt="Lt Col (Dr) Rahul Sandhu - Surgical Oncology clinical care consultation with patient"
               className="w-full h-full object-cover object-[78%_top] sm:object-[78%_top] block"
               loading="eager"
@@ -278,20 +311,30 @@ export default function HeroSection({
 
           {/* Mobile CTA Buttons: Vertically Stacked Full-Width Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 pt-1">
-            <button
-              type="button"
-              onClick={openAppointmentModal}
-              className="w-full sm:w-auto bg-[#17665F] hover:bg-[#124F4A] text-white px-6 py-3.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 shadow-md flex items-center justify-center gap-2 cursor-pointer active:scale-98 border border-[#45DDC8]/35"
-            >
-              <Calendar className="w-4 h-4 text-[#EEF2F1]" />
-              <span>Book a Consultation</span>
-            </button>
+            {ctaPrimaryLink && ctaPrimaryLink !== "#book-consultation" ? (
+              <Link
+                href={ctaPrimaryLink}
+                className="w-full sm:w-auto bg-[#17665F] hover:bg-[#124F4A] text-white px-6 py-3.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 shadow-md flex items-center justify-center gap-2 cursor-pointer active:scale-98 border border-[#45DDC8]/35"
+              >
+                <Calendar className="w-4 h-4 text-[#EEF2F1]" />
+                <span>{ctaPrimaryLabel || "BOOK A CONSULTATION"}</span>
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={openAppointmentModal}
+                className="w-full sm:w-auto bg-[#17665F] hover:bg-[#124F4A] text-white px-6 py-3.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 shadow-md flex items-center justify-center gap-2 cursor-pointer active:scale-98 border border-[#45DDC8]/35"
+              >
+                <Calendar className="w-4 h-4 text-[#EEF2F1]" />
+                <span>{ctaPrimaryLabel || "BOOK A CONSULTATION"}</span>
+              </button>
+            )}
 
             <Link
-              href="/about"
+              href={ctaSecondaryLink || "/about"}
               className="w-full sm:w-auto border border-white/25 hover:border-white bg-[#102A3B]/60 text-white px-5 py-3.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-2 text-center active:scale-98"
             >
-              <span>Meet Dr. Rahul Sandhu</span>
+              <span>{ctaSecondaryLabel || "MEET DR. RAHUL SANDHU"}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>

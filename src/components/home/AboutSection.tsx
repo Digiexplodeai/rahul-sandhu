@@ -201,11 +201,16 @@ export default function AboutSection({
               transition={{ duration: 0.55, delay: 0.16, ease: luxuryEase }}
               className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-[13px] font-bold uppercase tracking-[0.16em] text-[#B98E3A]"
             >
-              <span>CANCER SURGERY</span>
-              <span className="text-[#C59B4E]/50 font-normal">|</span>
-              <span>SURGICAL ONCOLOGY</span>
-              <span className="text-[#C59B4E]/50 font-normal">|</span>
-              <span>COMPREHENSIVE CANCER CARE</span>
+              {designation.includes("|") ? (
+                designation.split("|").map((item, idx, arr) => (
+                  <span key={item.trim()} className="inline-flex items-center gap-2 sm:gap-3">
+                    <span>{item.trim()}</span>
+                    {idx < arr.length - 1 && <span className="text-[#C59B4E]/50 font-normal">|</span>}
+                  </span>
+                ))
+              ) : (
+                <span>{designation}</span>
+              )}
             </motion.div>
 
             {/* SHORT EDITORIAL BIOGRAPHY */}
