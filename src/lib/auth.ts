@@ -3,7 +3,10 @@ import { cookies } from "next/headers";
 import db from "./db";
 
 const SESSION_COOKIE_NAME = "dr_sandhu_admin_session";
-const SESSION_SECRET = process.env.ADMIN_SESSION_SECRET || "sandhu-secure-oncology-production-session-key-2026";
+const SESSION_SECRET =
+  process.env.ADMIN_SESSION_SECRET ||
+  process.env.SESSION_SECRET ||
+  "sandhu-secure-oncology-production-session-key-2026";
 const MAX_FAILED_ATTEMPTS = 5;
 const LOCKOUT_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
 

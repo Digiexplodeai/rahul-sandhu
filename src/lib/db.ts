@@ -2,16 +2,73 @@ import Database from "better-sqlite3";
 import path from "path";
 import fs from "fs";
 
-const dbDir = path.join(process.cwd(), "data");
-if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
+function resolveDatabasePath(): string {
+  // 1. Explicit environment override
+  if (process.env.DATABASE_PATH) {
+    const customDir = path.dirname(process.env.DATABASE_PATH);
+    if (!fs.existsSync(customDir)) {
+      try {
+        fs.mkdirSync(customDir, { recursive: true });
+      } catch {}
+    }
+    return process.env.DATABASE_PATH;
+  }
+
+  const defaultDir = path.join(process.cwd(), "data");
+  const defaultDbPath = path.join(defaultDir, "site.db");
+
+  // 2. Detect serverless / read-only production environments (Vercel, AWS Lambda, Netlify)
+  const isServerless = Boolean(
+    process.env.VERCEL ||
+    process.env.AWS_LAMBDA_FUNCTION_NAME ||
+    process.env.LAMBDA_TASK_ROOT ||
+    process.env.NETLIFY
+  );
+
+  let isWritable = false;
+  try {
+    if (!fs.existsSync(defaultDir)) {
+      fs.mkdirSync(defaultDir, { recursive: true });
+    }
+    fs.accessSync(defaultDir, fs.constants.W_OK);
+    isWritable = true;
+  } catch {
+    isWritable = false;
+  }
+
+  // If serverless or read-only container, copy to /tmp for persistent runtime writes
+  if (isServerless || !isWritable) {
+    const tmpDir = process.env.TMPDIR || process.env.TEMP || "/tmp";
+    const tmpDbPath = path.join(tmpDir, "site.db");
+
+    try {
+      if (!fs.existsSync(tmpDbPath) && fs.existsSync(defaultDbPath)) {
+        fs.copyFileSync(defaultDbPath, tmpDbPath);
+        const walPath = defaultDbPath + "-wal";
+        if (fs.existsSync(walPath)) {
+          fs.copyFileSync(walPath, tmpDbPath + "-wal");
+        }
+      }
+    } catch (copyErr) {
+      console.warn("[DB] Note: Could not copy bundle DB to /tmp:", copyErr);
+    }
+    return tmpDbPath;
+  }
+
+  return defaultDbPath;
 }
 
-const dbPath = path.join(dbDir, "site.db");
+const dbPath = resolveDatabasePath();
 const db = new Database(dbPath);
 
-// Enable WAL mode for high concurrency
-db.pragma("journal_mode = WAL");
+// Enable WAL mode safely with fallback
+try {
+  db.pragma("journal_mode = WAL");
+} catch {
+  try {
+    db.pragma("journal_mode = DELETE");
+  } catch {}
+}
 
 // Initialize Schema
 export function initDb() {
