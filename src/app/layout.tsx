@@ -21,7 +21,6 @@ export const metadata: Metadata = {
     "Breast Cancer Surgeon Mohali",
     "Minimally Invasive Cancer Surgery",
     "Shalby Hospital Mohali Oncologist",
-    "ClearMedi Healthcare Oncologist",
   ],
   authors: [{ name: "Lt Col (Dr) Rahul Sandhu" }],
   creator: "Lt Col (Dr) Rahul Sandhu",

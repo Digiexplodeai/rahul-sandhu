@@ -20,7 +20,6 @@ import {
 import { FadeUp } from "@/components/ui/motion";
 
 export default function ContactPage() {
-  const [activeTab, setActiveTab] = useState<"shalby" | "clearmedi">("shalby");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -96,7 +95,7 @@ export default function ContactPage() {
           </FadeUp>
           <FadeUp delay={0.25}>
             <p className="text-sm sm:text-base text-[#D6DFE4]/85 max-w-2xl mt-3 font-sans leading-relaxed">
-              Consult with Lt Col (Dr) Rahul Sandhu across verified surgical hospital facilities in Mohali and Kharar.
+              Consult with Lt Col (Dr) Rahul Sandhu at Shalby Hospital, Mohali.
             </p>
           </FadeUp>
         </div>
@@ -110,54 +109,15 @@ export default function ContactPage() {
             {/* Left Column: Hospital Locations & Map */}
             <div className="lg:col-span-7 space-y-6">
               
-              {/* Location Switcher Tabs */}
-              <div className="flex border-b border-[#E2E7E4]">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setActiveTab("shalby");
-                    setForm((prev) => ({ ...prev, preferred_location: "Shalby Hospital, Mohali" }));
-                  }}
-                  className={`flex-1 pb-3 text-xs sm:text-sm font-semibold transition-colors cursor-pointer text-center relative ${
-                    activeTab === "shalby"
-                      ? "text-[#142B3D]"
-                      : "text-[#5C707A] hover:text-[#142B3D]"
-                  }`}
-                >
-                  <span className="flex items-center justify-center gap-2">
-                    <Building2 className={`w-4 h-4 ${activeTab === "shalby" ? "text-[#17665F]" : "text-[#5C707A]"}`} />
-                    <span>Shalby Hospital, Mohali</span>
-                  </span>
-                  {activeTab === "shalby" && (
-                    <div className="absolute bottom-0 inset-x-0 h-0.5 bg-[#17665F] rounded-full" />
-                  )}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setActiveTab("clearmedi");
-                    setForm((prev) => ({ ...prev, preferred_location: "ClearMedi Healthcare, Kharar" }));
-                  }}
-                  className={`flex-1 pb-3 text-xs sm:text-sm font-semibold transition-colors cursor-pointer text-center relative ${
-                    activeTab === "clearmedi"
-                      ? "text-[#142B3D]"
-                      : "text-[#5C707A] hover:text-[#142B3D]"
-                  }`}
-                >
-                  <span className="flex items-center justify-center gap-2">
-                    <Building2 className={`w-4 h-4 ${activeTab === "clearmedi" ? "text-[#17665F]" : "text-[#5C707A]"}`} />
-                    <span>ClearMedi Healthcare, Kharar</span>
-                  </span>
-                  {activeTab === "clearmedi" && (
-                    <div className="absolute bottom-0 inset-x-0 h-0.5 bg-[#17665F] rounded-full" />
-                  )}
-                </button>
+              <div className="flex items-center gap-2 pb-3 border-b border-[#E2E7E4]">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#17665F]/10 text-[#17665F] text-xs font-semibold">
+                  <Building2 className="w-4 h-4" />
+                  <span>Verified Practice Hospital</span>
+                </div>
               </div>
 
               {/* Location Card */}
-              {activeTab === "shalby" ? (
-                <div className="bg-white rounded-2xl border border-[#E2E7E4] p-6 sm:p-7 shadow-xs space-y-4">
+              <div className="bg-white rounded-2xl border border-[#E2E7E4] p-6 sm:p-7 shadow-xs space-y-4">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-[#E2E7E4]">
                     <div>
                       <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#142B3D]">
@@ -231,92 +191,12 @@ export default function ContactPage() {
                     </a>
                   </div>
                 </div>
-              ) : (
-                <div className="bg-white rounded-2xl border border-[#E2E7E4] p-6 sm:p-7 shadow-xs space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-[#E2E7E4]">
-                    <div>
-                      <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#142B3D]">
-                        ClearMedi Healthcare, Kharar
-                      </h2>
-                      <p className="text-xs text-[#17665F] font-semibold mt-0.5">
-                        Oncology &amp; Surgical Super-Speciality
-                      </p>
-                    </div>
-
-                    <a
-                      href="https://maps.google.com/?q=ClearMedi+Radiant+Hospital+Kharar"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="border border-[#142B3D]/30 hover:border-[#142B3D] text-[#142B3D] inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider shrink-0 self-start sm:self-auto transition-colors"
-                    >
-                      <Navigation className="w-3.5 h-3.5" />
-                      <span>Directions</span>
-                    </a>
-                  </div>
-
-                  <div className="space-y-3 text-xs sm:text-sm text-[#283941]">
-                    <div className="flex items-start gap-2.5">
-                      <MapPin className="w-4 h-4 text-[#17665F] shrink-0 mt-0.5" />
-                      <span>NH-21, Chandigarh-Ropar Road, Near Kharar Bus Stand, Kharar, Punjab 140104</span>
-                    </div>
-
-                    <div className="flex items-start gap-2.5">
-                      <Clock className="w-4 h-4 text-[#17665F] shrink-0 mt-0.5" />
-                      <div>
-                        <p className="font-semibold text-[#142B3D]">Consultation Hours:</p>
-                        <p className="text-xs text-[#5C707A]">Monday to Saturday: By Prior Appointment</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2.5">
-                      <Phone className="w-4 h-4 text-[#17665F] shrink-0" />
-                      <span>Direct: </span>
-                      <a href="tel:+919888970519" className="font-semibold text-[#142B3D] hover:text-[#17665F]">
-                        +91 98889 70519
-                      </a>
-                    </div>
-
-                    <div className="flex items-center gap-2.5">
-                      <Mail className="w-4 h-4 text-[#17665F] shrink-0" />
-                      <span>Email: </span>
-                      <a href="mailto:drsand.rahul@gmail.com" className="text-[#142B3D] hover:text-[#17665F]">
-                        drsand.rahul@gmail.com
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="pt-3 border-t border-[#E2E7E4] flex flex-wrap gap-3">
-                    <a
-                      href="tel:+919888970519"
-                      className="bg-[#17665F] hover:bg-[#124F4A] text-white px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-2 transition-colors"
-                    >
-                      <Phone className="w-3.5 h-3.5" />
-                      <span>Call Hospital OPD</span>
-                    </a>
-
-                    <a
-                      href="https://wa.me/919888970519?text=Hello%20Dr.%20Rahul%20Sandhu,%20I%20would%20like%20to%20enquire%20about%20a%20cancer%20consultation%20at%20ClearMedi%20Hospital."
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-[#25D366] hover:bg-[#20ba5a] text-white px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-2 transition-colors shadow-xs"
-                    >
-                      <MessageCircle className="w-3.5 h-3.5" />
-                      <span>WhatsApp Assistant</span>
-                    </a>
-                  </div>
-                </div>
-              )}
 
               {/* Map Embed */}
               <div className="rounded-2xl overflow-hidden border border-[#E2E7E4] h-64 bg-[#EEF2F1]">
                 <iframe
                   title="Hospital Map Location"
-                  src={
-                    activeTab === "shalby"
-                      ? "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430.730248430634!2d76.73264637651034!3d30.697858088924043!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fee7bf568dc65%3A0x64e03507dcb0653c!2sShalby%20Hospital%20Mohali!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
-                      : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3428.483120129038!2d76.64321287651307!3d30.74665488583489!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fe53b015b63eb%3A0xc47e30d1767675f9!2sClearMedi%20Radiant%20Hospital!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
-                  }
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430.730248430634!2d76.73264637651034!3d30.697858088924043!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fee7bf568dc65%3A0x64e03507dcb0653c!2sShalby%20Hospital%20Mohali!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
@@ -417,16 +297,10 @@ export default function ContactPage() {
                     <select
                       id="preferred_location"
                       value={form.preferred_location}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        setForm({ ...form, preferred_location: val });
-                        if (val.includes("Shalby")) setActiveTab("shalby");
-                        if (val.includes("ClearMedi")) setActiveTab("clearmedi");
-                      }}
+                      onChange={(e) => setForm({ ...form, preferred_location: e.target.value })}
                       className="form-input-luxury bg-white"
                     >
                       <option value="Shalby Hospital, Mohali">Shalby Hospital, Mohali (9 AM – 5 PM)</option>
-                      <option value="ClearMedi Healthcare, Kharar">ClearMedi Healthcare, Kharar (By Appt)</option>
                       <option value="Online / Video Consultation">Online / Video Consultation</option>
                     </select>
                   </div>

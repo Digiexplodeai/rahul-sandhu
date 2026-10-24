@@ -31,9 +31,8 @@ Matched to the luxury medical personal branding aesthetic:
   - Fellowship in Minimal Access Surgery (FMAS) & FIAGES — Medicity Gurgaon
   - Diplomas in Infection Control & Antimicrobial Stewardship — NHCA Singapore
   - MBA in Hospital Care Services — Sikkim Manipal University
-- **Hospital Affiliations:**
+- **Hospital Affiliation:**
   - **Shalby Hospital, Mohali:** Mohali Stadium Rd, Phase 9, Sector 63, Sahibzada Ajit Singh Nagar, Punjab 160062
-  - **ClearMedi Healthcare, Kharar:** NH-21, Chandigarh-Ropar Road, Kharar, Punjab 140104
 - **Direct Phone:** `+91 9888970519`
 - **Email:** `drsand.rahul@gmail.com`
 

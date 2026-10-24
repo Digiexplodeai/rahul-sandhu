@@ -10,7 +10,7 @@ interface TopBarProps {
 }
 
 export default function TopBar({
-  location = "Shalby Hospital, Mohali & ClearMedi Healthcare, Kharar",
+  location = "Shalby Hospital, Mohali",
   phone = "+91 98889 70519",
   hours = "Mon – Sat: 9:00 AM – 5:00 PM",
 }: TopBarProps) {

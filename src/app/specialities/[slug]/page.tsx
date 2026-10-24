@@ -251,7 +251,7 @@ export default async function SpecialtyDetailPage({ params }: PageProps) {
                 Discuss Your Case Directly with Dr. Rahul Sandhu
               </h3>
               <p className="text-xs sm:text-sm text-[#D6DFE4]/80 mt-1">
-                Personalized oncological assessment and second opinions in Mohali &amp; Kharar.
+                Personalized oncological assessment and second opinions at Shalby Hospital, Mohali.
               </p>
             </div>
             <Link

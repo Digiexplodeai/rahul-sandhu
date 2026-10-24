@@ -230,7 +230,7 @@ export default function HeroSection({
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#45DDC8]" />
-                <span>Shalby Mohali &amp; ClearMedi Kharar</span>
+                <span>Shalby Hospital, Mohali</span>
               </div>
             </motion.div>
 
@@ -344,10 +344,6 @@ export default function HeroSection({
             <div className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#45DDC8]" />
               <span>Shalby Hospital, Mohali</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#45DDC8]" />
-              <span>ClearMedi Healthcare, Kharar</span>
             </div>
           </div>
 

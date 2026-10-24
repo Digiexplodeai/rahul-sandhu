@@ -177,7 +177,7 @@ export default function TestimonialsPage() {
                 Begin Your Healing Journey
               </h3>
               <p className="text-xs sm:text-sm text-[#D6DFE4]/80 mt-1">
-                Personalized, empathetic surgical oncology care in Mohali and Kharar.
+                Personalized, empathetic surgical oncology care at Shalby Hospital, Mohali.
               </p>
             </div>
             <Link

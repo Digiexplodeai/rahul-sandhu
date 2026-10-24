@@ -11,7 +11,7 @@ import {
   Loader2,
   Calendar,
 } from "lucide-react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 interface ClinicContactSectionProps {
   settings?: Record<string, string>;
@@ -26,14 +26,8 @@ export default function ClinicContactSection({ settings }: ClinicContactSectionP
   const clinic1Timings = settings?.clinic1_timings || "Mon – Sat: 9:00 AM – 5:00 PM";
   const clinic1Map = settings?.clinic1_map_url || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3431.2586712398453!2d76.73238697626297!3d30.682914088686127!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fef9302e1c4ef%3A0xc3cf8e87d84f9ffb!2sShalby%20Multi-Specialty%20Hospital%20Mohali!5e0!3m2!1sen!2sin!4v1714000000000!5m2!1sen!2sin";
 
-  const clinic2Name = settings?.clinic2_name || "ClearMedi Healthcare, Kharar";
-  const clinic2Address = settings?.clinic2_address || "NH-21, Chandigarh-Ropar Road, Kharar, Punjab 140104";
-  const clinic2Timings = settings?.clinic2_timings || "Mon – Sat: By Prior Appointment";
-  const clinic2Map = settings?.clinic2_map_url || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3428.483120129038!2d76.64321287651307!3d30.74665488583489!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fe53b015b63eb%3A0xc47e30d1767675f9!2sClearMedi%20Radiant%20Hospital!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin";
-
   const directPhone = settings?.topbar_phone || "+91 98889 70519";
 
-  const [activeTab, setActiveTab] = useState<"shalby" | "clearmedi">("shalby");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const [form, setForm] = useState({
@@ -105,7 +99,7 @@ export default function ClinicContactSection({ settings }: ClinicContactSectionP
             Schedule a Confidential Consultation
           </h2>
           <p className="text-sm text-[#D5E4E9] mt-2 font-sans leading-relaxed">
-            Meet with Lt Col (Dr) Rahul Sandhu for clinical diagnosis, treatment planning, or an informed second surgical opinion at Shalby Hospital Mohali or ClearMedi Healthcare Kharar.
+            Meet with Lt Col (Dr) Rahul Sandhu for clinical diagnosis, treatment planning, or an informed second surgical opinion at Shalby Hospital, Mohali.
           </p>
         </motion.div>
 
@@ -119,165 +113,66 @@ export default function ClinicContactSection({ settings }: ClinicContactSectionP
             transition={{ duration: 0.65, ease: luxuryEase }}
             className="lg:col-span-5 space-y-5"
           >
-            {/* Hospital Switcher Tabs */}
-            <div className="flex border-b border-white/20">
-              <button
-                type="button"
-                onClick={() => setActiveTab("shalby")}
-                className={`flex-1 pb-3 text-xs sm:text-sm font-semibold transition-colors cursor-pointer text-center relative ${
-                  activeTab === "shalby"
-                    ? "text-[#45DDC8] font-bold"
-                    : "text-[#D5E4E9] hover:text-[#FFFFFF]"
-                }`}
-              >
-                <span>Shalby Hospital, Mohali</span>
-                {activeTab === "shalby" && (
-                  <motion.div
-                    layoutId="active-hospital-tab"
-                    className="absolute bottom-0 inset-x-0 h-0.5 bg-[#45DDC8] rounded-full"
-                  />
-                )}
-              </button>
+            {/* Verified Practice Facility Card */}
+            <div className="bg-[#1A3449] p-6 rounded-2xl border border-white/15 space-y-4 shadow-xl">
+              <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                <div>
+                  <h3 className="font-serif font-bold text-xl text-[#FFFFFF]">
+                    {clinic1Name}
+                  </h3>
+                  <p className="text-xs text-[#45DDC8] font-medium mt-0.5">
+                    Department of Surgical Oncology
+                  </p>
+                </div>
+                <span className="px-2.5 py-1 rounded-full bg-[#17665F]/40 border border-[#45DDC8]/30 text-[#45DDC8] text-[10px] font-semibold uppercase tracking-wider">
+                  Verified Facility
+                </span>
+              </div>
 
-              <button
-                type="button"
-                onClick={() => setActiveTab("clearmedi")}
-                className={`flex-1 pb-3 text-xs sm:text-sm font-semibold transition-colors cursor-pointer text-center relative ${
-                  activeTab === "clearmedi"
-                    ? "text-[#45DDC8] font-bold"
-                    : "text-[#D5E4E9] hover:text-[#FFFFFF]"
-                }`}
-              >
-                <span>ClearMedi Healthcare, Kharar</span>
-                {activeTab === "clearmedi" && (
-                  <motion.div
-                    layoutId="active-hospital-tab"
-                    className="absolute bottom-0 inset-x-0 h-0.5 bg-[#45DDC8] rounded-full"
-                  />
-                )}
-              </button>
+              <p className="text-xs text-[#D5E4E9] flex items-start gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-[#45DDC8] shrink-0 mt-0.5" />
+                <span>{clinic1Address}</span>
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-[#D5E4E9] pt-1">
+                <div className="flex items-center gap-2 bg-[#142B3D] p-3 rounded-lg border border-white/10">
+                  <Clock className="w-3.5 h-3.5 text-[#45DDC8] shrink-0" />
+                  <span>{clinic1Timings}</span>
+                </div>
+                <div className="flex items-center gap-2 bg-[#142B3D] p-3 rounded-lg border border-white/10">
+                  <Phone className="w-3.5 h-3.5 text-[#45DDC8] shrink-0" />
+                  <a href={`tel:${directPhone.replace(/\s+/g, "")}`} className="hover:text-[#FFFFFF] text-[#D5E4E9] font-medium transition-colors">
+                    {directPhone}
+                  </a>
+                </div>
+              </div>
+
+              {/* Google Map Embed */}
+              <div className="w-full h-44 rounded-xl overflow-hidden border border-white/15">
+                <iframe
+                  src={clinic1Map}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen={false}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title={`${clinic1Name} Location Map`}
+                />
+              </div>
+
+              <div className="flex items-center gap-4 pt-1">
+                <a
+                  href="https://maps.google.com/?q=Shalby+Hospital+Mohali"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#45DDC8] hover:text-[#FFFFFF] transition-colors"
+                >
+                  <Navigation className="w-3.5 h-3.5" />
+                  <span>Get Driving Directions &rarr;</span>
+                </a>
+              </div>
             </div>
-
-            {/* Active Clinic Details Card */}
-            <AnimatePresence mode="wait">
-              {activeTab === "shalby" ? (
-                <motion.div
-                  key="shalby"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.3 }}
-                  className="bg-[#1A3449] p-6 rounded-2xl border border-white/15 space-y-4 shadow-xl"
-                >
-                  <div>
-                    <h3 className="font-serif font-bold text-xl text-[#FFFFFF]">
-                      {clinic1Name}
-                    </h3>
-                    <p className="text-xs text-[#D5E4E9] mt-1.5 flex items-start gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-[#45DDC8] shrink-0 mt-0.5" />
-                      <span>{clinic1Address}</span>
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-[#D5E4E9] pt-1">
-                    <div className="flex items-center gap-2 bg-[#142B3D] p-3 rounded-lg border border-white/10">
-                      <Clock className="w-3.5 h-3.5 text-[#45DDC8] shrink-0" />
-                      <span>{clinic1Timings}</span>
-                    </div>
-                    <div className="flex items-center gap-2 bg-[#142B3D] p-3 rounded-lg border border-white/10">
-                      <Phone className="w-3.5 h-3.5 text-[#45DDC8] shrink-0" />
-                      <a href={`tel:${directPhone.replace(/\s+/g, "")}`} className="hover:text-[#FFFFFF] text-[#D5E4E9] font-medium transition-colors">
-                        {directPhone}
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* Google Map Embed */}
-                  <div className="w-full h-40 rounded-xl overflow-hidden border border-white/15">
-                    <iframe
-                      src={clinic1Map}
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0 }}
-                      allowFullScreen={false}
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title={`${clinic1Name} Location Map`}
-                    />
-                  </div>
-
-                  <div className="flex items-center gap-4 pt-1">
-                    <a
-                      href="https://maps.google.com/?q=Shalby+Hospital+Mohali"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#45DDC8] hover:text-[#FFFFFF] transition-colors"
-                    >
-                      <Navigation className="w-3.5 h-3.5" />
-                      <span>Get Driving Directions &rarr;</span>
-                    </a>
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="clearmedi"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.3 }}
-                  className="bg-[#1A3449] p-6 rounded-2xl border border-white/15 space-y-4 shadow-xl"
-                >
-                  <div>
-                    <h3 className="font-serif font-bold text-xl text-[#FFFFFF]">
-                      {clinic2Name}
-                    </h3>
-                    <p className="text-xs text-[#D5E4E9] mt-1.5 flex items-start gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-[#45DDC8] shrink-0 mt-0.5" />
-                      <span>{clinic2Address}</span>
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-[#D5E4E9] pt-1">
-                    <div className="flex items-center gap-2 bg-[#142B3D] p-3 rounded-lg border border-white/10">
-                      <Clock className="w-3.5 h-3.5 text-[#45DDC8] shrink-0" />
-                      <span>{clinic2Timings}</span>
-                    </div>
-                    <div className="flex items-center gap-2 bg-[#142B3D] p-3 rounded-lg border border-white/10">
-                      <Phone className="w-3.5 h-3.5 text-[#45DDC8] shrink-0" />
-                      <a href={`tel:${directPhone.replace(/\s+/g, "")}`} className="hover:text-[#FFFFFF] text-[#D5E4E9] font-medium transition-colors">
-                        {directPhone}
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* Google Map Embed */}
-                  <div className="w-full h-40 rounded-xl overflow-hidden border border-white/15">
-                    <iframe
-                      src={clinic2Map}
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0 }}
-                      allowFullScreen={false}
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title={`${clinic2Name} Location Map`}
-                    />
-                  </div>
-
-                  <div className="flex items-center gap-4 pt-1">
-                    <a
-                      href="https://maps.google.com/?q=ClearMedi+Hospital+Kharar"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#45DDC8] hover:text-[#FFFFFF] transition-colors"
-                    >
-                      <Navigation className="w-3.5 h-3.5" />
-                      <span>Get Driving Directions &rarr;</span>
-                    </a>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
 
             {/* Quick Contact Options */}
             <div className="flex flex-wrap items-center gap-3 pt-1">
@@ -398,7 +293,7 @@ export default function ClinicContactSection({ settings }: ClinicContactSectionP
                       className="w-full px-4 py-3 rounded-xl border border-white/20 bg-[#102E3D] text-sm text-[#FFFFFF] focus:outline-none focus:border-[#45DDC8] transition-all cursor-pointer"
                     >
                       <option value="Shalby Hospital, Mohali" className="bg-[#102E3D] text-white">Shalby Hospital, Mohali</option>
-                      <option value="ClearMedi Healthcare, Kharar" className="bg-[#102E3D] text-white">ClearMedi Healthcare, Kharar</option>
+                      <option value="Online / Video Consultation" className="bg-[#102E3D] text-white">Online / Video Consultation</option>
                     </select>
                   </div>
 

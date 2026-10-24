@@ -278,7 +278,7 @@ function seedInitialData() {
 
   // 1. Site Settings
   const defaultSettings: Record<string, string> = {
-    topbar_location: "Shalby Hospital, Mohali & ClearMedi Healthcare, Kharar",
+    topbar_location: "Shalby Hospital, Mohali",
     topbar_phone: "+91 9888970519",
     topbar_email: "drsand.rahul@gmail.com",
     topbar_hours: "Mon – Sat: 9:00 AM – 5:00 PM",
@@ -324,10 +324,10 @@ function seedInitialData() {
     clinic1_timings: "Mon – Sat: 9:00 AM – 5:00 PM",
     clinic1_map_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430.730248430634!2d76.73264637651034!3d30.697858088924043!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fee7bf568dc65%3A0x64e03507dcb0653c!2sShalby%20Hospital%20Mohali!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin",
 
-    clinic2_name: "ClearMedi Healthcare, Kharar",
-    clinic2_address: "NH-21, Chandigarh-Ropar Road, Kharar, Punjab 140104",
-    clinic2_timings: "Mon – Sat: By Prior Appointment",
-    clinic2_map_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3428.483120129038!2d76.64321287651307!3d30.74665488583489!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fe53b015b63eb%3A0xc47e30d1767675f9!2sClearMedi%20Radiant%20Hospital!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin",
+    clinic2_name: "",
+    clinic2_address: "",
+    clinic2_timings: "",
+    clinic2_map_url: "",
 
     section_order: JSON.stringify([
       "hero",
@@ -623,7 +623,7 @@ function seedInitialData() {
       author_name: "Munish Rana",
       author_location: "Kharar, Punjab",
       condition: "Gallbladder & Complex Onco Evaluation",
-      content: "My mother was suffering from severe pain and gallbladder swelling. We went to meet Dr Rahul Sandhu an Onco Specialist at ClearMedi Hospital. From the very first consultation, he made sure to explain the diagnosis clearly and guided us step-by-step through the entire process. Their expertise, compassionate approach, and attention to detail gave us great confidence and hope. Dr Rahul Sandhu always listened very patiently to our concerns and answered all our questions whether in person or over phone calls. The treatment was handled with utmost professionalism. I felt well-supported both medically and emotionally through this tough time.",
+      content: "My mother was suffering from severe pain and gallbladder swelling. We went to meet Dr Rahul Sandhu an Onco Specialist. From the very first consultation, he made sure to explain the diagnosis clearly and guided us step-by-step through the entire process. Their expertise, compassionate approach, and attention to detail gave us great confidence and hope. Dr Rahul Sandhu always listened very patiently to our concerns and answered all our questions whether in person or over phone calls. The treatment was handled with utmost professionalism. I felt well-supported both medically and emotionally through this tough time.",
       rating: 5,
       source: "Google Reviews (Verified)",
       is_featured: 1,
@@ -748,7 +748,7 @@ In our practice, we believe that treating a patient means healing both the physi
 **The Reality:** Bed rest after surgery is now minimized. Under our Enhanced Recovery protocols, most patients sit up, drink fluids, and take gentle steps within 12 to 24 hours of surgery. Early activity stimulates circulation, prevents blood clots, and accelerates intestinal recovery.
 
 ### The Antidote to Fear: Clear, Empathetic Communication
-The most powerful cure for surgical fear is a doctor who listens. At our clinics in Shalby Hospital Mohali and ClearMedi Healthcare Kharar, we ensure no patient enters the operating theatre with unresolved doubts.`,
+The most powerful cure for surgical fear is a doctor who listens. At our clinic in Shalby Hospital, Mohali, we ensure no patient enters the operating theatre with unresolved doubts.`,
       cover_image: "/images/Fears-Before-Surgery-300x225.png",
       category: "Patient Guidance",
       author: "Lt Col (Dr) Rahul Sandhu",
@@ -834,7 +834,7 @@ function seedFaqsAndVideos() {
       {
         id: "faq-3",
         question: "Where does Lt Col (Dr) Rahul Sandhu conduct consultations and surgeries?",
-        answer: "Dr. Rahul Sandhu conducts outpatient consultations and performs oncology surgeries primarily at Shalby Hospital, Mohali (Phase 9, Sector 63) and ClearMedi Healthcare, Kharar (NH-21). Prior appointment booking is recommended to avoid waiting.",
+        answer: "Dr. Rahul Sandhu conducts outpatient consultations and performs oncology surgeries primarily at Shalby Hospital, Mohali (Phase 9, Sector 63). Prior appointment booking is recommended to avoid waiting.",
         category: "Hospital & Locations",
         order_num: 3,
         is_published: 1,
@@ -866,7 +866,7 @@ function seedFaqsAndVideos() {
       {
         id: "faq-7",
         question: "Are cancer surgeries covered under health insurance and cashless empanelment?",
-        answer: "Yes, both Shalby Hospital Mohali and ClearMedi Healthcare Kharar have dedicated TPA and insurance desks supporting all major private health insurers, corporate TPAs, CGHS, and ECHS panels.",
+        answer: "Yes, Shalby Hospital, Mohali has a dedicated TPA and insurance desk supporting all major private health insurers, corporate TPAs, CGHS, and ECHS panels.",
         category: "Insurance & Billing",
         order_num: 7,
         is_published: 1,
@@ -935,7 +935,7 @@ function seedPages() {
       { slug: "/testimonials", title: "Patient Stories & Videos", meta_title: "Patient Experiences & Reviews | Lt Col (Dr) Rahul Sandhu", meta_description: "Verified patient testimonials and clinical video discussions on cancer surgical care." },
       { slug: "/blog", title: "Health & Awareness Blog", meta_title: "Cancer Care Knowledge & Insights | Dr. Rahul Sandhu", meta_description: "Doctor-authored clinical guides on cancer surgery, staging, myths, and early symptom recognition." },
       { slug: "/faqs", title: "Frequently Asked Questions", meta_title: "Cancer Surgery FAQs | Lt Col (Dr) Rahul Sandhu", meta_description: "Clear answers to essential questions regarding surgical oncology, second opinions, and hospitalization." },
-      { slug: "/contact", title: "Contact & Appointments", meta_title: "Schedule Consultation | Shalby Mohali & ClearMedi Kharar", meta_description: "Book an outpatient appointment or second surgical opinion with Lt Col (Dr) Rahul Sandhu." },
+      { slug: "/contact", title: "Contact & Appointments", meta_title: "Schedule Consultation | Shalby Hospital, Mohali", meta_description: "Book an outpatient appointment or second surgical opinion with Lt Col (Dr) Rahul Sandhu." },
       { slug: "/privacy-policy", title: "Privacy Policy", meta_title: "Privacy Policy | Lt Col (Dr) Rahul Sandhu", meta_description: "Patient data confidentiality and clinical information privacy statement." },
       { slug: "/terms-of-use", title: "Terms of Use", meta_title: "Terms of Use | Lt Col (Dr) Rahul Sandhu", meta_description: "Medical disclaimer and website terms of use." },
     ];

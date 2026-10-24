@@ -78,7 +78,7 @@ export default function CtaBanner() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-sm text-[var(--text-ivory)]">In-Person & Online Consults</h4>
-                    <p className="text-xs text-[var(--text-slate)] mt-1">Available at Shalby Hospital Mohali & ClearMedi Kharar, plus pan-India virtual opinions.</p>
+                    <p className="text-xs text-[var(--text-slate)] mt-1">Available at Shalby Hospital, Mohali, plus pan-India virtual opinions.</p>
                   </div>
                 </div>
 

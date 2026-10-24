@@ -165,7 +165,7 @@ export default function PatientResourcesPage() {
                 Schedule Your Consultation
               </h3>
               <p className="text-xs sm:text-sm text-[#D6DFE4]/80 mt-1">
-                Personalized evaluation with Lt Col (Dr) Rahul Sandhu in Mohali &amp; Kharar.
+                Personalized evaluation with Lt Col (Dr) Rahul Sandhu at Shalby Hospital, Mohali.
               </p>
             </div>
             <Link

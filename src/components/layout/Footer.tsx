@@ -152,16 +152,10 @@ export default function Footer() {
             </h4>
 
             <div className="space-y-2.5 text-xs">
-              <div className="p-2.5 rounded-lg bg-white/5 border border-white/10">
+              <div className="p-3 rounded-xl bg-white/5 border border-white/10">
                 <p className="font-semibold text-[#FAFBF9]">Shalby Hospital, Mohali</p>
                 <p className="text-[11px] text-[#D6DFE4]/70 mt-0.5">Phase 9, Sector 63, SAS Nagar</p>
                 <p className="text-[11px] text-[#EEF2F1] mt-1 font-medium">Mon – Sat: 9:00 AM – 5:00 PM</p>
-              </div>
-
-              <div className="p-2.5 rounded-lg bg-white/5 border border-white/10">
-                <p className="font-semibold text-[#FAFBF9]">ClearMedi Healthcare, Kharar</p>
-                <p className="text-[11px] text-[#D6DFE4]/70 mt-0.5">NH-21, Chandigarh-Ropar Road</p>
-                <p className="text-[11px] text-[#EEF2F1] mt-1 font-medium">By Prior Appointment</p>
               </div>
             </div>
 

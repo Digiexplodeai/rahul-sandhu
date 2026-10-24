@@ -277,7 +277,7 @@ export default function AboutPage() {
                 Schedule a Consultation with Dr. Rahul Sandhu
               </h3>
               <p className="text-xs sm:text-sm text-[#D6DFE4]/80 mt-1">
-                Available for outpatient consultations at Shalby Hospital Mohali and ClearMedi Healthcare Kharar.
+                Available for outpatient consultations at Shalby Hospital, Mohali.
               </p>
             </div>
             <Link

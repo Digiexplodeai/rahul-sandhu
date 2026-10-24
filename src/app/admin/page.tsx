@@ -2978,7 +2978,7 @@ export default function AdminDashboardPage() {
                     Clinic Locations, Hours &amp; Google Maps
                   </h2>
                   <p className="text-xs text-[#5C707A] mt-0.5">
-                    Manage Shalby Hospital Mohali and ClearMedi Healthcare Kharar practice settings.
+                    Manage Shalby Hospital, Mohali practice settings.
                   </p>
                 </div>
                 <button
@@ -3036,10 +3036,10 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
 
-              {/* Clinic 2: ClearMedi */}
+              {/* Clinic 2 (Optional) */}
               <div className="bg-white p-6 rounded-2xl border border-[#E2E7E4] shadow-xs space-y-4">
                 <h3 className="font-serif text-base font-bold text-[#142B3D]">
-                  Location 2: ClearMedi Healthcare, Kharar
+                  Location 2: Secondary / Affiliated Clinic (Optional)
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                   <div>

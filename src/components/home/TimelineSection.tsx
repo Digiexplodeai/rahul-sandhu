@@ -58,7 +58,7 @@ export default function TimelineSection() {
       year: "2024 – Present",
       icon: Building2,
       title: "Senior Consultant — Surgical Oncology",
-      institution: "Shalby Hospital, Mohali & ClearMedi Healthcare, Kharar",
+      institution: "Shalby Hospital, Mohali",
       description: "Active clinical and surgical oncology practice offering personalized cancer surgery, multidisciplinary tumor board coordination, and comprehensive patient care.",
     },
   ];

@@ -221,7 +221,6 @@ export default function AppointmentModal() {
                           className="w-full pl-9 pr-3 py-2.5 text-sm rounded-xl bg-white text-[#283941] border border-[#E2E7E4] focus:border-[#17665F] focus:outline-hidden focus:ring-1 focus:ring-[#17665F]"
                         >
                           <option value="Shalby Hospital, Mohali">Shalby Hospital, Mohali (Phase 9)</option>
-                          <option value="ClearMedi Healthcare, Kharar">ClearMedi Healthcare, Kharar (NH-21)</option>
                           <option value="Online / Video Consultation">Online / Video Consultation</option>
                         </select>
                       </div>

@@ -123,7 +123,7 @@ export default async function HomePage() {
         />
       )}
 
-      {/* SECTION 7 — Consultation & Practice Locations (Shalby & ClearMedi + Appointment Form) */}
+      {/* SECTION 7 — Consultation & Practice Locations (Shalby Hospital + Appointment Form) */}
       {visibility.contact !== false && (
         <ClinicContactSection settings={settings} />
       )}

@@ -31,24 +31,14 @@ export default function DoctorSchema() {
         name: "Homi Bhabha Cancer Hospital and Research Centre (HBCHRC), Punjab",
       },
     ],
-    address: [
-      {
-        "@type": "PostalAddress",
-        streetAddress: "Mohali Stadium Rd, near PCA Stadium, Phase 9, Sector 63",
-        addressLocality: "Sahibzada Ajit Singh Nagar, Mohali",
-        addressRegion: "Punjab",
-        postalCode: "160062",
-        addressCountry: "IN",
-      },
-      {
-        "@type": "PostalAddress",
-        streetAddress: "NH-21, Chandigarh-Ropar Road",
-        addressLocality: "Kharar",
-        addressRegion: "Punjab",
-        postalCode: "140104",
-        addressCountry: "IN",
-      },
-    ],
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Mohali Stadium Rd, near PCA Stadium, Phase 9, Sector 63",
+      addressLocality: "Sahibzada Ajit Singh Nagar, Mohali",
+      addressRegion: "Punjab",
+      postalCode: "160062",
+      addressCountry: "IN",
+    },
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
