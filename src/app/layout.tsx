@@ -5,6 +5,9 @@ import AppointmentModal from "@/components/appointment/AppointmentModal";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://drrahulsandhu.com"),
+  alternates: {
+    canonical: "/",
+  },
   title: {
     default: "Lt Col (Dr) Rahul Sandhu | Surgical Oncologist | Mohali & Chandigarh",
     template: "%s | Lt Col (Dr) Rahul Sandhu",
@@ -85,9 +88,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <head>
-        <link rel="canonical" href="https://drrahulsandhu.com" />
-      </head>
       <body className="min-h-screen flex flex-col bg-[#FAFBF9] text-[#283941] antialiased selection:bg-[#17665F]/15 selection:text-[#142B3D]">
         {children}
         <FloatingMobileBar />

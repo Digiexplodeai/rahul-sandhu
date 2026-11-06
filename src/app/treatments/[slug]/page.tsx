@@ -18,9 +18,11 @@ interface PageProps {
 
 export async function generateStaticParams() {
   const treatments = getTreatments();
-  return treatments.map((t) => ({
-    slug: t.slug,
-  }));
+  return treatments
+    .filter((t) => t.slug !== "desarda-mesh-free-inguinal-hernia-repair")
+    .map((t) => ({
+      slug: t.slug,
+    }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

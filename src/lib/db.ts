@@ -592,6 +592,21 @@ function seedInitialData() {
       image: "/images/Urological-Cancers.jpg",
       order_num: 8,
       is_published: 1
+    },
+    {
+      id: "treat-9",
+      slug: "desarda-mesh-free-inguinal-hernia-repair",
+      title: "Desarda Mesh-Free Inguinal Hernia Repair",
+      subtitle: "Physiological Non-Mesh Inguinal Canal Reconstruction",
+      excerpt: "A physiological, tissue-based surgical alternative for inguinal hernia repair utilizing the patient's own external oblique aponeurosis without foreign body mesh implants.",
+      description: "Desarda Mesh-Free Inguinal Hernia Repair is an established open, tissue-based surgical technique that reconstructs the posterior wall of the inguinal canal using an undetached strip of the patient's own external oblique aponeurosis. Developed as a physiological alternative to prosthetic mesh implants, it relies entirely on vascularized, living host tissue.",
+      indications: "Adult patients with uncomplicated primary direct or indirect inguinal hernias, individuals with documented sensitivity, adverse reaction, or desire to avoid permanent synthetic mesh implants, and candidates with healthy, strong external oblique aponeurotic tissue.",
+      procedure_steps: "Thorough clinical and ultrasonographic preoperative evaluation; Standard inguinal incision with gentle identification and reduction of the hernia sac; Mobilization of an undetached strip of external oblique aponeurosis preserving neural and vascular integrity; Physiological transposition and suturing of the strip to the inguinal ligament and internal oblique/transversus abdominis, creating a tension-free, dynamic posterior wall; Multi-layered anatomical closure.",
+      benefits: "Completely avoids foreign body synthetic mesh and associated risks of mesh migration, contraction, or foreign-body reactions; Restores dynamic physiological contraction of the groin during abdominal strain; Cost-effective tissue-based solution with low recurrence in appropriately selected patients.",
+      recovery_info: "Most patients undergo short hospital observation (day-case or 24-hour discharge), initiate gentle ambulation within 12-24 hours, resume light sedentary routines in 7-14 days, and return to full physical activities after 4-6 weeks following clinical review.",
+      image: "/images/surgery.png",
+      order_num: 9,
+      is_published: 1
     }
   ];
 
@@ -938,6 +953,7 @@ function seedPages() {
       { slug: "/contact", title: "Contact & Appointments", meta_title: "Schedule Consultation | Shalby Hospital, Mohali", meta_description: "Book an outpatient appointment or second surgical opinion with Lt Col (Dr) Rahul Sandhu." },
       { slug: "/privacy-policy", title: "Privacy Policy", meta_title: "Privacy Policy | Lt Col (Dr) Rahul Sandhu", meta_description: "Patient data confidentiality and clinical information privacy statement." },
       { slug: "/terms-of-use", title: "Terms of Use", meta_title: "Terms of Use | Lt Col (Dr) Rahul Sandhu", meta_description: "Medical disclaimer and website terms of use." },
+      { slug: "/treatments/desarda-mesh-free-inguinal-hernia-repair", title: "Desarda Mesh-Free Hernia Repair", meta_title: "Desarda Mesh-Free Hernia Repair in Mohali | Dr Rahul Sandhu", meta_description: "Learn about Desarda mesh-free inguinal hernia repair in Mohali, including the procedure, suitability, risks and recovery. Explore treatment options." },
     ];
 
     const insertPage = db.prepare("INSERT INTO pages (id, slug, title, meta_title, meta_description, is_published, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)");

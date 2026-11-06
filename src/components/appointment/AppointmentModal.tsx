@@ -245,6 +245,7 @@ export default function AppointmentModal() {
                         <option value="Gynaecological Cancer">Uterine / Ovarian Cancer</option>
                         <option value="Urological Cancer">Kidney / Bladder / Prostate</option>
                         <option value="Second Opinion">Second Opinion on Surgery</option>
+                        <option value="Desarda / Inguinal Hernia Consultation">Desarda / Inguinal Hernia Consultation</option>
                         <option value="General Consultation">General Cancer Consultation</option>
                       </select>
                     </div>
