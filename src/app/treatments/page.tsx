@@ -134,7 +134,7 @@ export default function TreatmentsPage() {
                   >
                     <div className="relative h-48 sm:h-52 w-full bg-[#EEF2F1] overflow-hidden">
                       <Image
-                        src={t.image || "/images/surgery.png"}
+                        src={t.image || "/images/inguinal-hernia-anatomy.webp"}
                         alt={t.title}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

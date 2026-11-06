@@ -604,7 +604,7 @@ function seedInitialData() {
       procedure_steps: "Thorough clinical and ultrasonographic preoperative evaluation; Standard inguinal incision with gentle identification and reduction of the hernia sac; Mobilization of an undetached strip of external oblique aponeurosis preserving neural and vascular integrity; Physiological transposition and suturing of the strip to the inguinal ligament and internal oblique/transversus abdominis, creating a tension-free, dynamic posterior wall; Multi-layered anatomical closure.",
       benefits: "Completely avoids foreign body synthetic mesh and associated risks of mesh migration, contraction, or foreign-body reactions; Restores dynamic physiological contraction of the groin during abdominal strain; Cost-effective tissue-based solution with low recurrence in appropriately selected patients.",
       recovery_info: "Most patients undergo short hospital observation (day-case or 24-hour discharge), initiate gentle ambulation within 12-24 hours, resume light sedentary routines in 7-14 days, and return to full physical activities after 4-6 weeks following clinical review.",
-      image: "/images/surgery.png",
+      image: "/images/inguinal-hernia-anatomy.webp",
       order_num: 9,
       is_published: 1
     }
